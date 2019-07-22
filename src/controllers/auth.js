@@ -22,6 +22,37 @@ function verifyToken(req, res, next) {
       });
 }
 
+function login(req, res, next) {
+  var username = req.body.username;
+  var password = req.body.password;
+  var apiRoot = process.env.ROARING_API_ROOT || "https://api.roaring.io";
+  var data = username + ":" + password;  
+  var buff = new Buffer(data);  
+  var base64data = buff.toString('base64');
+  var config = {
+    url : "/token",
+    baseURL : apiRoot,
+    method : "post",
+    data : qs.stringify({
+      "grant_type" : "client_credentials"
+    }),
+    headers : {
+        'Content-Type' : "application/x-www-form-urlencoded",
+        "Authorization" : "Basic " + base64data
+    }
+  };
+  console.log(config);
+  axios(config).then(function (response) {
+    console.log(response.data.access_token)
+      req.access_token = response.data.access_token;
+      next();
+    })
+    .catch(function (error) {
+      console.log(error);
+      res.status(400).send(error);
+    });
+}
+
 function getRoaringToken(req, res, next) {
     var username = process.env.ROARING_USERNAME || "7WdiQzeZHTNUbReQMt4dwUpAYNoa";
     var password = process.env.ROARING_PASSWORD || "_Mk3choT6cARfmaXdwymWKROpE0a";
@@ -87,6 +118,8 @@ function getSFToken(req, res, next) {
       res.status(400).send(error);
     });
 }
+
+exports.login = login;
 exports.verifyToken = verifyToken;
 exports.getSalesForceToken = getSFToken;
 exports.getRoaringToken = getRoaringToken;
