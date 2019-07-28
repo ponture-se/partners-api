@@ -1,23 +1,41 @@
 const axios = require('axios');
 
+var error_result = {
+  "success": false,
+  "errorCode": null,
+  "message": null,
+  "data": undefined,
+  "statusCode": 400
+}
 exports.getNewApplications = function(req, res, next)
 {
+  if (!req.query.partnerid)
+  {
+    var err = error_result;
+    err.message = "PartnerID is invalid";
+    res.status(400).send(err);
+  }
+  console.log(req.query);
   var accessToken = req.access_token;
   var apiRoot = process.env.SALESFORCE_API_ROOT || "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
   var config = {
-    url : "/services/apexrest/submit",
+    url : "/needs/services/apexrest/pCommunity/getSPO",
     baseURL : apiRoot,
-    method : "post",
-    data : req.body,
+    method : "get",
+    params : {
+      "action" : "new",
+      "partnerID" : req.query.partnerid
+    },
     headers : {
         'Authorization' : "Bearer " + accessToken
     }
   };
   console.log(config);
   axios(config).then(function (response) {
-    console.log(response.data);
-    console.log(response.status);
-      res.send(response.data);
+    if (response.data.success)
+    res.send(response.data);
+  else
+    res.status(response.data.statusCode).send(response.data);
     })
     .catch(function (error) {
       if (error.response) {
@@ -32,7 +50,7 @@ exports.getNewApplications = function(req, res, next)
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
         console.log(error.request);
-        res.status(204).send("No response from BankID server");
+        res.status(204).send("No response from server");
       } else {
         // Something happened in setting up the request that triggered an Error
         console.log('Error', error.message);
@@ -45,22 +63,33 @@ exports.getNewApplications = function(req, res, next)
 
 exports.getOpenedApplications = function(req, res, next)
 {
+  if (!req.query.partnerid)
+  {
+    var err = error_result;
+    err.message = "PartnerID is invalid";
+    res.status(400).send(err);
+  }
+  console.log(req.query);
   var accessToken = req.access_token;
   var apiRoot = process.env.SALESFORCE_API_ROOT || "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
   var config = {
-    url : "/services/apexrest/submit",
+    url : "/needs/services/apexrest/pCommunity/getSPO",
     baseURL : apiRoot,
-    method : "post",
-    data : req.body,
+    method : "get",
+    params : {
+      "action" : "opened",
+      "partnerID" : req.query.partnerid
+    },
     headers : {
         'Authorization' : "Bearer " + accessToken
     }
   };
   console.log(config);
   axios(config).then(function (response) {
-    console.log(response.data);
-    console.log(response.status);
-      res.send(response.data);
+    if (response.data.success)
+    res.send(response.data);
+  else
+    res.status(response.data.statusCode).send(response.data);
     })
     .catch(function (error) {
       if (error.response) {
@@ -75,7 +104,7 @@ exports.getOpenedApplications = function(req, res, next)
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
         console.log(error.request);
-        res.status(204).send("No response from BankID server");
+        res.status(204).send("No response from server");
       } else {
         // Something happened in setting up the request that triggered an Error
         console.log('Error', error.message);
@@ -85,3 +114,148 @@ exports.getOpenedApplications = function(req, res, next)
       res.status(400).send(error.config);
     });
 }
+
+exports.openApplication = function(req, res, next)
+{
+  if (!req.query.cID)
+  {
+    var err = error_result;
+    err.message = "PartnerID is invalid";
+    res.status(400).send(err);
+  }
+  if (!req.query.oppID)
+  {
+    var err = error_result;
+    err.message = "Opportunity is invalid";
+    res.status(400).send(err);
+  }
+  var accessToken = req.access_token;
+  var apiRoot = process.env.SALESFORCE_API_ROOT || "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
+  var config = {
+    url : "/needs/services/apexrest/openOpp",
+    baseURL : apiRoot,
+    method : "get",
+    params : req.query,
+    headers : {
+        'Authorization' : "Bearer " + accessToken
+    }
+  };
+  console.log(config);
+  axios(config).then(function (response) {
+    if (response.data.success)
+    res.send(response.data);
+  else
+    res.status(response.data.statusCode).send(response.data);
+    })
+    .catch(function (error) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        res.status(error.response.status).send(error.response.data);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log(error.request);
+        res.status(204).send("No response from server");
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+        res.status(500).send(error.message);
+      }
+      console.log(error.config);
+      res.status(400).send(error.config);
+    });
+}
+
+exports.rejectApplication = function(req, res, next)
+{
+  var accessToken = req.access_token;
+  var apiRoot = process.env.SALESFORCE_API_ROOT || "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
+  var config = {
+    url : "/needs/services/apexrest/pCommunity/reject",
+    baseURL : apiRoot,
+    method : "get",
+    params : req.query,
+    headers : {
+        'Authorization' : "Bearer " + accessToken
+    }
+  };
+  console.log(config);
+  axios(config).then(function (response) {
+    if (response.data.success)
+    res.send(response.data);
+  else
+    res.status(response.data.statusCode).send(response.data);
+    })
+    .catch(function (error) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        res.status(error.response.status).send(error.response.data);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log(error.request);
+        res.status(204).send("No response from server");
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+        res.status(500).send(error.message);
+      }
+      console.log(error.config);
+      res.status(400).send(error.config);
+    });
+}
+
+exports.getCreditReport = function(req, res, next)
+{
+  var accessToken = req.access_token;
+  var apiRoot = process.env.SALESFORCE_API_ROOT || "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
+  var config = {
+    url : "/needs/services/apexrest/pCommunity/creditReport",
+    baseURL : apiRoot,
+    method : "get",
+    params : req.query,
+    headers : {
+        'Authorization' : "Bearer " + accessToken
+    }
+  };
+  console.log(config);
+  axios(config).then(function (response) {
+    if (response.data.success)
+    res.send(response.data);
+  else
+    res.status(response.data.statusCode).send(response.data);
+    })
+    .catch(function (error) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        res.status(error.response.status).send(error.response.data);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log(error.request);
+        res.status(204).send("No response from server");
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+        res.status(500).send(error.message);
+      }
+      console.log(error.config);
+      res.status(400).send(error.config);
+    });
+}
+

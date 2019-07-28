@@ -17,37 +17,41 @@ function verifyToken(req, res, next) {
           return res.status(401).send({ auth: false, message: 'Failed to authenticate token. ' });
         // if everything good, save to request for use in other routes 
         console.log("decoded : ", decoded);
-        req.orderRef = decoded.orderRef;
+        req.access_token = decoded.access_token;
         next();
       });
 }
 
 function login(req, res, next) {
-  var username = req.body.username;
-  var password = req.body.password;
-  var apiRoot = process.env.ROARING_API_ROOT || "https://api.roaring.io";
-  var data = username + ":" + password;  
-  var buff = new Buffer(data);  
-  var base64data = buff.toString('base64');
+  var apiRoot =  process.env.SALESFORCE_API_ROOT || "https://crmdev-ponture-crmdev.cs84.force.com";
+  
   var config = {
-    url : "/token",
+    url : "/needs/services/apexrest/pCommunity/login",
     baseURL : apiRoot,
     method : "post",
-    data : qs.stringify({
-      "grant_type" : "client_credentials"
-    }),
+    data : req.body,
     headers : {
-        'Content-Type' : "application/x-www-form-urlencoded",
-        "Authorization" : "Basic " + base64data
+        'Content-Type' : "application/json",
+        "Authorization" : "Bearer " + req.access_token
     }
   };
   console.log(config);
   axios(config).then(function (response) {
-    console.log(response.data.access_token)
-      req.access_token = response.data.access_token;
-      next();
+      if (response.data.success)
+      {
+        var token = jwt.sign({ access_token: req.access_token}, cnf.secret, {
+          expiresIn: process.env.AUTHENTICATIONTOKEN_EXPIRE_TIME || 120 * 60 // expires in 30 minutes
+        });
+        console.log("test2");
+        res.status(200).send({access_token : token});
+      }
+      else
+      {
+    res.status(401).send(response.data);
+      }
     })
     .catch(function (error) {
+      console.log("test4");
       console.log(error);
       res.status(400).send(error);
     });
