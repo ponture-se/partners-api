@@ -77,7 +77,7 @@ exports.getOpenedApplications = function(req, res, next)
     baseURL : apiRoot,
     method : "get",
     params : {
-      "action" : "opened",
+      "action" : "open",
       "partnerID" : req.partnerId
     },
     headers : {

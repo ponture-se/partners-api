@@ -8,7 +8,9 @@ exports.getPartnerProducts = function(req, res, next)
     url : "/needs/services/apexrest/pCommunity/getProductsMaster",
     baseURL : apiRoot,
     method : "get",
-    params : req.query,
+    params : {
+      partnerId : req.partnerId
+    },
     headers : {
         'Authorization' : "Bearer " + accessToken
     }
@@ -97,7 +99,7 @@ exports.getoffers = function(req, res, next)
     baseURL : apiRoot,
     method : "get",
     params : {
-      "cID" : req.partnerId,
+      "partnerId" : req.partnerId,
       "stage" : "all"
     },
     headers : {
@@ -144,7 +146,7 @@ exports.acceptedoffers = function(req, res, next)
     baseURL : apiRoot,
     method : "get",
     params : {
-      "cID" : req.partnerId,
+      "partnerId" : req.partnerId,
       "stage" : "offer accepted"
     },
     headers : {
@@ -192,7 +194,7 @@ exports.lostapplications = function(req, res, next)
     baseURL : apiRoot,
     method : "get",
     params : {
-      "cID" : req.partnerId,
+      "partnerId" : req.partnerId,
       "stage" : "offer lost"
     },
     headers : {
@@ -239,7 +241,7 @@ exports.fundedapplications = function(req, res, next)
     baseURL : apiRoot,
     method : "get",
     params : {
-      "cID" : req.partnerId,
+      "partnerId" : req.partnerId,
       "stage" : "offer won"
     },
     headers : {
