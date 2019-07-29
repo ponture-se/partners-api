@@ -24,7 +24,7 @@ exports.getNewApplications = function(req, res, next)
     method : "get",
     params : {
       "action" : "new",
-      "partnerID" : req.partnerId
+      "partnerId" : req.partnerId
     },
     headers : {
         'Authorization' : "Bearer " + accessToken
