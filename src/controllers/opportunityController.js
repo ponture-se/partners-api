@@ -9,7 +9,7 @@ var error_result = {
 }
 exports.getNewApplications = function(req, res, next)
 {
-  if (!req.query.partnerid)
+  if (!req.partnerId)
   {
     var err = error_result;
     err.message = "PartnerID is invalid";
@@ -24,7 +24,7 @@ exports.getNewApplications = function(req, res, next)
     method : "get",
     params : {
       "action" : "new",
-      "partnerID" : req.query.partnerid
+      "partnerID" : req.partnerId
     },
     headers : {
         'Authorization' : "Bearer " + accessToken
@@ -63,7 +63,7 @@ exports.getNewApplications = function(req, res, next)
 
 exports.getOpenedApplications = function(req, res, next)
 {
-  if (!req.query.partnerid)
+  if (!req.partnerId)
   {
     var err = error_result;
     err.message = "PartnerID is invalid";
@@ -78,7 +78,7 @@ exports.getOpenedApplications = function(req, res, next)
     method : "get",
     params : {
       "action" : "opened",
-      "partnerID" : req.query.partnerid
+      "partnerID" : req.partnerId
     },
     headers : {
         'Authorization' : "Bearer " + accessToken
@@ -117,13 +117,13 @@ exports.getOpenedApplications = function(req, res, next)
 
 exports.openApplication = function(req, res, next)
 {
-  if (!req.query.cID)
+  if (!req.partnerId)
   {
     var err = error_result;
     err.message = "PartnerID is invalid";
     res.status(400).send(err);
   }
-  if (!req.query.oppID)
+  if (!req.body.oppID)
   {
     var err = error_result;
     err.message = "Opportunity is invalid";
@@ -134,8 +134,11 @@ exports.openApplication = function(req, res, next)
   var config = {
     url : "/needs/services/apexrest/openOpp",
     baseURL : apiRoot,
-    method : "get",
-    params : req.query,
+    method : "put",
+    params : {
+      "partnerId" : req.partnerId,
+      "oppId" : req.body.oppID
+    },
     headers : {
         'Authorization' : "Bearer " + accessToken
     }
@@ -173,13 +176,28 @@ exports.openApplication = function(req, res, next)
 
 exports.rejectApplication = function(req, res, next)
 {
+  if (!req.partnerId)
+  {
+    var err = error_result;
+    err.message = "PartnerID is invalid";
+    res.status(400).send(err);
+  }
+  if (!req.body.oppID)
+  {
+    var err = error_result;
+    err.message = "Opportunity is invalid";
+    res.status(400).send(err);
+  }
   var accessToken = req.access_token;
   var apiRoot = process.env.SALESFORCE_API_ROOT || "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
   var config = {
     url : "/needs/services/apexrest/pCommunity/reject",
     baseURL : apiRoot,
-    method : "get",
-    params : req.query,
+    method : "put",
+    params : {
+      "partnerId" : req.partnerId,
+      "oppId" : req.body.oppID
+    },
     headers : {
         'Authorization' : "Bearer " + accessToken
     }

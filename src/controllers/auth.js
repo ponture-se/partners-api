@@ -18,6 +18,7 @@ function verifyToken(req, res, next) {
         // if everything good, save to request for use in other routes 
         console.log("decoded : ", decoded);
         req.access_token = decoded.access_token;
+        req.partnerId = decoded.partnerId;
         next();
       });
 }
@@ -39,21 +40,19 @@ function login(req, res, next) {
   axios(config).then(function (response) {
       if (response.data.success)
       {
-        var token = jwt.sign({ access_token: req.access_token}, cnf.secret, {
+        console.log(response.data);
+        var token = jwt.sign({ access_token: req.access_token, partnerId : response.data.data.partnerId}, cnf.secret, {
           expiresIn: process.env.AUTHENTICATIONTOKEN_EXPIRE_TIME || 120 * 60 // expires in 30 minutes
         });
-        console.log("test2");
         res.status(200).send({access_token : token});
       }
       else
       {
-    res.status(401).send(response.data);
+        res.status(response.statusCode).send(response);
       }
     })
     .catch(function (error) {
-      console.log("test4");
-      console.log(error);
-      res.status(400).send(error);
+      res.status(error.response.data.statusCode).send(error.response.data);
     });
 }
 

@@ -97,7 +97,7 @@ exports.getoffers = function(req, res, next)
     baseURL : apiRoot,
     method : "get",
     params : {
-      "cID" : req.query.partnerID,
+      "cID" : req.partnerId,
       "stage" : "all"
     },
     headers : {
@@ -144,7 +144,7 @@ exports.acceptedoffers = function(req, res, next)
     baseURL : apiRoot,
     method : "get",
     params : {
-      "cID" : req.query.partnerID,
+      "cID" : req.partnerId,
       "stage" : "offer accepted"
     },
     headers : {
@@ -192,7 +192,7 @@ exports.lostapplications = function(req, res, next)
     baseURL : apiRoot,
     method : "get",
     params : {
-      "cID" : req.query.partnerID,
+      "cID" : req.partnerId,
       "stage" : "offer lost"
     },
     headers : {
@@ -239,7 +239,7 @@ exports.fundedapplications = function(req, res, next)
     baseURL : apiRoot,
     method : "get",
     params : {
-      "cID" : req.query.partnerID,
+      "cID" : req.partnerId,
       "stage" : "offer won"
     },
     headers : {
