@@ -78,7 +78,7 @@ exports.getOpenedApplications = function(req, res, next)
     method : "get",
     params : {
       "action" : "open",
-      "partnerID" : req.partnerId
+      "partnerId" : req.partnerId
     },
     headers : {
         'Authorization' : "Bearer " + accessToken
