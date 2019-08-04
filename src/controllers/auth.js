@@ -88,10 +88,10 @@ function getRoaringToken(req, res, next) {
 }
 
 function getSFToken(req, res, next) {
-  var client_id = process.env.SALESFORCE_CLIENTID || "3MVG96mGXeuuwTZgBI_DSQZsUSU.NpMlsgog1iSTKORTxBQZC9XD3.NDR5iLSvMzu3IonN7e_wHNJYtRAAR.c";
-  var client_secret = process.env.SALESFORCE_CLIENT_SECRET || "DA064B463510A05FCD9284CC90313EC304107EC613292C57CC84A5DAE4734D00";
-  var username = process.env.SALESFORCE_USERNAME || "hamed-3eph@force.com.crmdev";
-  var password = process.env.SALESFORCE_PASSWORD || "ponZXC123!";
+  var client_id = process.env.SALESFORCE_CLIENTID;
+  var client_secret = process.env.SALESFORCE_CLIENT_SECRET;
+  var username = process.env.SALESFORCE_USERNAME;
+  var password = process.env.SALESFORCE_PASSWORD;
   var apiRoot = process.env.LOGIN_API_ROOT || "https://test.salesforce.com";
   var d = {
       grant_type : 'password',
