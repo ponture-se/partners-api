@@ -1,28 +1,28 @@
-const axios = require('axios');
+const axios = require("axios");
 
-exports.getPartnerProducts = function(req, res, next)
-{
+exports.getPartnerProducts = function(req, res, next) {
   var accessToken = req.access_token;
-  var apiRoot = process.env.SALESFORCE_API_ROOT || "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
+  var apiRoot =
+    process.env.SALESFORCE_API_ROOT ||
+    "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
   var config = {
-    url : "/needs/services/apexrest/pCommunity/getProductsMaster",
-    baseURL : apiRoot,
-    method : "get",
-    params : {
-      partnerId : req.partnerId
+    url: "/services/apexrest/pCommunity/getProductsMaster",
+    baseURL: apiRoot,
+    method: "get",
+    params: {
+      partnerId: req.partnerId
     },
-    headers : {
-        'Authorization' : "Bearer " + accessToken
+    headers: {
+      Authorization: "Bearer " + accessToken
     }
   };
   console.log(config);
-  axios(config).then(function (response) {
-    if (response.data.success)
-    res.send(response.data);
-  else
-    res.status(response.data.statusCode).send(response.data);
+  axios(config)
+    .then(function(response) {
+      if (response.data.success) res.send(response.data);
+      else res.status(response.data.statusCode).send(response.data);
     })
-    .catch(function (error) {
+    .catch(function(error) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -38,35 +38,35 @@ exports.getPartnerProducts = function(req, res, next)
         res.status(204).send("No response from server");
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
+        console.log("Error", error.message);
         res.status(500).send(error.message);
       }
       console.log(error.config);
       res.status(400).send(error.config);
     });
-}
+};
 
-exports.issueOffer = function(req, res, next)
-{
+exports.issueOffer = function(req, res, next) {
   var accessToken = req.access_token;
-  var apiRoot = process.env.SALESFORCE_API_ROOT || "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
+  var apiRoot =
+    process.env.SALESFORCE_API_ROOT ||
+    "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
   var config = {
-    url : "/needs/services/apexrest/issueOffer",
-    baseURL : apiRoot,
-    method : "post",
-    data : req.body,
-    headers : {
-        'Authorization' : "Bearer " + accessToken
+    url: "/services/apexrest/issueOffer",
+    baseURL: apiRoot,
+    method: "post",
+    data: req.body,
+    headers: {
+      Authorization: "Bearer " + accessToken
     }
   };
   console.log(config);
-  axios(config).then(function (response) {
-    if (response.data.success)
-    res.send(response.data);
-  else
-    res.status(response.data.statusCode).send(response.data);
+  axios(config)
+    .then(function(response) {
+      if (response.data.success) res.send(response.data);
+      else res.status(response.data.statusCode).send(response.data);
     })
-    .catch(function (error) {
+    .catch(function(error) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -82,38 +82,38 @@ exports.issueOffer = function(req, res, next)
         res.status(204).send("No response from server");
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
+        console.log("Error", error.message);
         res.status(500).send(error.message);
       }
       console.log(error.config);
       res.status(400).send(error.config);
     });
-}
+};
 
-exports.getoffers = function(req, res, next)
-{
+exports.getoffers = function(req, res, next) {
   var accessToken = req.access_token;
-  var apiRoot = process.env.SALESFORCE_API_ROOT || "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
+  var apiRoot =
+    process.env.SALESFORCE_API_ROOT ||
+    "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
   var config = {
-    url : "/needs/services/apexrest/spSingleOffer",
-    baseURL : apiRoot,
-    method : "get",
-    params : {
-      "partnerId" : req.partnerId,
-      "stage" : "all"
+    url: "/services/apexrest/spSingleOffer",
+    baseURL: apiRoot,
+    method: "get",
+    params: {
+      partnerId: req.partnerId,
+      stage: "all"
     },
-    headers : {
-        'Authorization' : "Bearer " + accessToken
+    headers: {
+      Authorization: "Bearer " + accessToken
     }
   };
   console.log(config);
-  axios(config).then(function (response) {
-    if (response.data.success)
-    res.send(response.data);
-  else
-    res.status(response.data.statusCode).send(response.data);
+  axios(config)
+    .then(function(response) {
+      if (response.data.success) res.send(response.data);
+      else res.status(response.data.statusCode).send(response.data);
     })
-    .catch(function (error) {
+    .catch(function(error) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -129,38 +129,38 @@ exports.getoffers = function(req, res, next)
         res.status(204).send("No response from server");
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
+        console.log("Error", error.message);
         res.status(500).send(error.message);
       }
       console.log(error.config);
       res.status(400).send(error.config);
     });
-}
+};
 
-exports.acceptedoffers = function(req, res, next)
-{
+exports.acceptedoffers = function(req, res, next) {
   var accessToken = req.access_token;
-  var apiRoot = process.env.SALESFORCE_API_ROOT || "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
+  var apiRoot =
+    process.env.SALESFORCE_API_ROOT ||
+    "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
   var config = {
-    url : "/needs/services/apexrest/spSingleOffer",
-    baseURL : apiRoot,
-    method : "get",
-    params : {
-      "partnerId" : req.partnerId,
-      "stage" : "offer accepted"
+    url: "/services/apexrest/spSingleOffer",
+    baseURL: apiRoot,
+    method: "get",
+    params: {
+      partnerId: req.partnerId,
+      stage: "offer accepted"
     },
-    headers : {
-        'Authorization' : "Bearer " + accessToken
+    headers: {
+      Authorization: "Bearer " + accessToken
     }
   };
   console.log(config);
-  axios(config).then(function (response) {
-    if (response.data.success)
-    res.send(response.data);
-  else
-    res.status(response.data.statusCode).send(response.data);
+  axios(config)
+    .then(function(response) {
+      if (response.data.success) res.send(response.data);
+      else res.status(response.data.statusCode).send(response.data);
     })
-    .catch(function (error) {
+    .catch(function(error) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -176,39 +176,38 @@ exports.acceptedoffers = function(req, res, next)
         res.status(204).send("No response from server");
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
+        console.log("Error", error.message);
         res.status(500).send(error.message);
       }
       console.log(error.config);
       res.status(400).send(error.config);
     });
-}
+};
 
-
-exports.lostapplications = function(req, res, next)
-{
+exports.lostapplications = function(req, res, next) {
   var accessToken = req.access_token;
-  var apiRoot = process.env.SALESFORCE_API_ROOT || "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
+  var apiRoot =
+    process.env.SALESFORCE_API_ROOT ||
+    "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
   var config = {
-    url : "/needs/services/apexrest/spSingleOffer",
-    baseURL : apiRoot,
-    method : "get",
-    params : {
-      "partnerId" : req.partnerId,
-      "stage" : "offer lost"
+    url: "/services/apexrest/spSingleOffer",
+    baseURL: apiRoot,
+    method: "get",
+    params: {
+      partnerId: req.partnerId,
+      stage: "offer lost"
     },
-    headers : {
-        'Authorization' : "Bearer " + accessToken
+    headers: {
+      Authorization: "Bearer " + accessToken
     }
   };
   console.log(config);
-  axios(config).then(function (response) {
-    if (response.data.success)
-    res.send(response.data);
-  else
-    res.status(response.data.statusCode).send(response.data);
+  axios(config)
+    .then(function(response) {
+      if (response.data.success) res.send(response.data);
+      else res.status(response.data.statusCode).send(response.data);
     })
-    .catch(function (error) {
+    .catch(function(error) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -224,38 +223,38 @@ exports.lostapplications = function(req, res, next)
         res.status(204).send("No response from server");
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
+        console.log("Error", error.message);
         res.status(500).send(error.message);
       }
       console.log(error.config);
       res.status(400).send(error.config);
     });
-}
+};
 
-exports.fundedapplications = function(req, res, next)
-{
+exports.fundedapplications = function(req, res, next) {
   var accessToken = req.access_token;
-  var apiRoot = process.env.SALESFORCE_API_ROOT || "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
+  var apiRoot =
+    process.env.SALESFORCE_API_ROOT ||
+    "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
   var config = {
-    url : "/needs/services/apexrest/spSingleOffer",
-    baseURL : apiRoot,
-    method : "get",
-    params : {
-      "partnerId" : req.partnerId,
-      "stage" : "offer won"
+    url: "/services/apexrest/spSingleOffer",
+    baseURL: apiRoot,
+    method: "get",
+    params: {
+      partnerId: req.partnerId,
+      stage: "offer won"
     },
-    headers : {
-        'Authorization' : "Bearer " + accessToken
+    headers: {
+      Authorization: "Bearer " + accessToken
     }
   };
   console.log(config);
-  axios(config).then(function (response) {
-    if (response.data.success)
-    res.send(response.data);
-  else
-    res.status(response.data.statusCode).send(response.data);
+  axios(config)
+    .then(function(response) {
+      if (response.data.success) res.send(response.data);
+      else res.status(response.data.statusCode).send(response.data);
     })
-    .catch(function (error) {
+    .catch(function(error) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -271,37 +270,35 @@ exports.fundedapplications = function(req, res, next)
         res.status(204).send("No response from server");
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
+        console.log("Error", error.message);
         res.status(500).send(error.message);
       }
       console.log(error.config);
       res.status(400).send(error.config);
     });
-}
+};
 
-
-
-exports.acceptOffer = function(req, res, next)
-{
+exports.acceptOffer = function(req, res, next) {
   var accessToken = req.access_token;
-  var apiRoot = process.env.SALESFORCE_API_ROOT || "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
+  var apiRoot =
+    process.env.SALESFORCE_API_ROOT ||
+    "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
   var config = {
-    url : "/needs/services/apexrest/pCommunity/creditReport",
-    baseURL : apiRoot,
-    method : "get",
-    params : req.query,
-    headers : {
-        'Authorization' : "Bearer " + accessToken
+    url: "/services/apexrest/pCommunity/creditReport",
+    baseURL: apiRoot,
+    method: "get",
+    params: req.query,
+    headers: {
+      Authorization: "Bearer " + accessToken
     }
   };
   console.log(config);
-  axios(config).then(function (response) {
-    if (response.data.success)
-    res.send(response.data);
-  else
-    res.status(response.data.statusCode).send(response.data);
+  axios(config)
+    .then(function(response) {
+      if (response.data.success) res.send(response.data);
+      else res.status(response.data.statusCode).send(response.data);
     })
-    .catch(function (error) {
+    .catch(function(error) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -317,11 +314,10 @@ exports.acceptOffer = function(req, res, next)
         res.status(204).send("No response from server");
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
+        console.log("Error", error.message);
         res.status(500).send(error.message);
       }
       console.log(error.config);
       res.status(400).send(error.config);
     });
-}
-
+};
