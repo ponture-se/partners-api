@@ -4,7 +4,7 @@ var auth = require("../controllers/auth");
 var controller = require("../controllers/quoteController");
 router.get("/products", auth.verifyToken, controller.getPartnerProducts);
 router.post("/issue", auth.verifyToken, controller.issueOffer);
-router.post("/edit", auth.verifyToken, controller.editOffer);
+router.put("/edit", auth.verifyToken, controller.editOffer);
 router.put("/accept", auth.verifyToken, controller.acceptOffer);
 router.put("/cancel", auth.verifyToken, controller.cancelOffer);
 router.get("/myoffers", auth.verifyToken, controller.getoffers);
