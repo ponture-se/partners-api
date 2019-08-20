@@ -329,7 +329,7 @@ exports.cancelOffer = function(req, res, next) {
   var config = {
     url: "/services/apexrest/cancelOffer",
     baseURL: apiRoot,
-    method: "get",
+    method: "put",
     params: req.query,
     headers: {
       Authorization: "Bearer " + accessToken
