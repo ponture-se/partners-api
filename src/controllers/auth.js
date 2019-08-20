@@ -53,7 +53,9 @@ function login(req, res, next) {
             expiresIn: process.env.AUTHENTICATIONTOKEN_EXPIRE_TIME || 120 * 60 // expires in 30 minutes
           }
         );
-        res.status(200).send({ access_token: token, data: response.data });
+        res
+          .status(200)
+          .send({ access_token: token, userInfo: response.data.data });
       } else {
         res.status(response.statusCode).send(response);
       }
