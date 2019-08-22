@@ -144,7 +144,7 @@ exports.getoffers = function(req, res, next) {
     method: "get",
     params: {
       partnerId: req.partnerId,
-      stage: "all"
+      stage: "offer issued"
     },
     headers: {
       Authorization: "Bearer " + accessToken
