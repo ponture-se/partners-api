@@ -3,6 +3,7 @@ var router = express.Router();
 var auth = require("../controllers/auth");
 var controller = require("../controllers/quoteController");
 router.get("/products", auth.verifyToken, controller.getPartnerProducts);
+router.get("/outline", auth.verifyToken, controller.getPartnerOfferColumns);
 router.post("/issue", auth.verifyToken, controller.issueOffer);
 router.put("/edit", auth.verifyToken, controller.editOffer);
 router.put("/accept", auth.verifyToken, controller.acceptOffer);
