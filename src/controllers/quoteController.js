@@ -55,9 +55,7 @@ exports.getPartnerOfferColumns = function(req, res, next) {
     url: "/services/apexrest/getLoanOutline",
     baseURL: apiRoot,
     method: "get",
-    params: {
-      partnerId: req.partnerId
-    },
+    params: req.query,
     headers: {
       Authorization: "Bearer " + accessToken
     }
