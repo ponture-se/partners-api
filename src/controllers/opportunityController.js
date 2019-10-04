@@ -145,7 +145,10 @@ exports.getOpenedApplications = function(req, res, next) {
   axios(config)
     .then(function(response) {
       if (response.data.success) res.send(response.data);
-      else res.status(response.data.statusCode).send(response.data);
+      else
+        res
+          .status(response.data.statusCode ? response.data.statusCode : 200)
+          .send(response.data);
     })
     .catch(function(error) {
       if (error.response) {
@@ -202,7 +205,10 @@ exports.openApplication = function(req, res, next) {
   axios(config)
     .then(function(response) {
       if (response.data.success) res.send(response.data);
-      else res.status(response.data.statusCode).send(response.data);
+      else
+        res
+          .status(response.data.statusCode ? response.data.statusCode : 200)
+          .send(response.data);
     })
     .catch(function(error) {
       if (error.response) {
@@ -256,7 +262,10 @@ exports.rejectApplication = function(req, res, next) {
   axios(config)
     .then(function(response) {
       if (response.data.success) res.send(response.data);
-      else res.status(response.data.statusCode).send(response.data);
+      else
+        res
+          .status(response.data.statusCode ? response.data.statusCode : 200)
+          .send(response.data);
     })
     .catch(function(error) {
       if (error.response) {
@@ -300,7 +309,10 @@ exports.getCreditReport = function(req, res, next) {
   axios(config)
     .then(function(response) {
       if (response.data.success) res.send(response.data);
-      else res.status(response.data.statusCode).send(response.data);
+      else
+        res
+          .status(response.data.statusCode ? response.data.statusCode : 200)
+          .send(response.data);
     })
     .catch(function(error) {
       if (error.response) {
