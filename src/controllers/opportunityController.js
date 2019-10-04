@@ -234,7 +234,7 @@ exports.rejectApplication = function(req, res, next) {
     err.message = "PartnerID is invalid";
     res.status(400).send(err);
   }
-  if (!req.body.oppID) {
+  if (!req.body.oppId) {
     var err = error_result;
     err.message = "Opportunity is invalid";
     res.status(400).send(err);
@@ -247,10 +247,7 @@ exports.rejectApplication = function(req, res, next) {
     url: "/services/apexrest/pCommunity/reject",
     baseURL: apiRoot,
     method: "put",
-    params: {
-      partnerId: req.partnerId,
-      oppId: req.body.oppID
-    },
+    data: req.body,
     headers: {
       Authorization: "Bearer " + accessToken
     }
