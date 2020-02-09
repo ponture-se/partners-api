@@ -22,7 +22,7 @@ async function downloadFile(req, res, next) {
     } else {
         let fileName = Date.now().toString() + ' ' + fileData.title;
 
-        await fileController.downloadFileAsStream(fileId, fileName, sfConn, function (err) {
+        let result = await fileController.downloadFileAsStream(fileId, fileName, sfConn, function (err) {
             if (err) {
                 resBody = myResponse(false, null, 500, 'downloadFile Func Throw Error', err);
                 // logger.error('downloadFile Func Throw Error', {metadata: resBody});
@@ -36,6 +36,12 @@ async function downloadFile(req, res, next) {
             }
             
         });
+
+        if (result == false) {
+            resBody = myResponse(false, null, 403, 'Partners are not allowed to see this file.');
+            res.status(403).send(resBody);
+            return next();
+        }
     }
 
 }
