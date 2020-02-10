@@ -38,6 +38,34 @@ async function getContentVersionWithFileId(fileId, sfConn = undefined){
     }
 }
 
+async function getContentVersionWithCustomFileId(fileId, sfConn = undefined){
+    try{
+        if (sfConn == undefined){
+            sfConn = await myToolkit.makeSFConnection();
+            if (sfConn == null){
+                return null;
+            }
+        }
+
+        let where = {File_ID__c : fileId};
+
+        let cvItem = await queryHelper.getSingleQueryResult(sfConn, "ContentVersion", where);
+        let cvsInfo = {
+                            cdId: cvItem.ContentDocumentId,
+                            id : cvItem.Id,
+                            title : cvItem.Title,
+                            fileExtension : cvItem.FileExtension,
+                            content: cvItem.VersionData
+                        };
+        
+        return cvsInfo;
+    } catch(e) {
+        console.log("getContentVersionWithFileId:", e);
+        return null;
+    }
+}
+
+
 
 
 async function downloadFileAsStream(fileId, fileName, sfConn, callback) {
@@ -64,6 +92,7 @@ async function downloadFileAsStream(fileId, fileName, sfConn, callback) {
     } catch (err) {
         // logger.error('downloadFileAsStream Error', { metadata: err });
         console.log('downloadFileAsStream Error', err);
+        throw err;
     }
 
 }
@@ -71,5 +100,6 @@ async function downloadFileAsStream(fileId, fileName, sfConn, callback) {
 
 module.exports = {
     getContentVersionWithFileId,
-    downloadFileAsStream
+    downloadFileAsStream,
+    getContentVersionWithCustomFileId
 }
