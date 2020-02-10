@@ -44,14 +44,22 @@ async function downloadFileAsStream(fileId, fileName, sfConn, callback) {
     // body payload structure is depending to the Apex REST method interface.
     var param = "?id=" + fileId;
     let result;
+    let permissionFor;
     try {
         result = await sfConn.apex.get("/getFile" + param);
+        permissionFor = (result.data.for) ? result.data.for.toLowerCase() : null;
+        if (permissionFor == 'partner' || permissionFor == 'all') {
 
-        fs.mkdir('./tempStorage/', { recursive: true }, (err) => {
-            if (err) throw err;
-        });
-        
-        fs.writeFile('./tempStorage/' + fileName, result.data.content, {encoding: 'base64'}, callback);
+            fs.mkdir('./tempStorage/', { recursive: true }, (err) => {
+                if (err) throw err;
+            });
+            
+            fs.writeFile('./tempStorage/' + fileName, result.data.content, {encoding: 'base64'}, callback);
+            
+            return true;
+        } else {
+            return false;
+        }
 
     } catch (err) {
         // logger.error('downloadFileAsStream Error', { metadata: err });
