@@ -6,17 +6,22 @@ function APIlogger(req, res, next){
     let temp = res.send;
 
     res.send = function () {
-        // Set res.body
-        let resBody = (arguments.length) ? arguments[0] : null;
-        res.body = resBody;  
+        // the outter try-catch block make sure that the exception will not stopped the functionality of res.send
+        try {
+            // Set res.body
+            let resBody = (arguments.length) ? arguments[0] : null;     // this get the argument which is sent as res.send(arg) argument
+            res.body = resBody;  
 
-        let data = prepareLogData(req, res);
+            let data = prepareLogData(req, res);
 
-        try{
-            // Just Parse the resbody to check if it would be parsed,so it was logged before
-            JSON.parse(resBody);
-        } catch (err) {
-            logger(data.logLevel, data.reqLog, data.resLog);
+            try{
+                // Just Parse the resbody to check if it would be parsed,so it was logged before
+                JSON.parse(resBody);
+            } catch (err) {
+                logger(data.logLevel, data.reqLog, data.resLog);
+            }
+        } catch (e)  {
+            console.log('API Logger Error. See this.', e);
         }
 
         temp.apply(this, arguments);
