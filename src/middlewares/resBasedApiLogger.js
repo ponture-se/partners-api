@@ -1,4 +1,5 @@
 const winston = require("winston");
+require('winston-mongodb');
 const dotenv = require('dotenv');
 dotenv.config();
 
