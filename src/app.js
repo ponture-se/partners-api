@@ -1,5 +1,5 @@
-const winston = require('winston');
-require('winston-mongodb');
+// const winston = require('winston');
+// require('winston-mongodb');
 const apiLogger = require('./middlewares/resBasedApiLogger');
 var express = require('express');
 var cors = require('cors')
@@ -12,19 +12,6 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 var app = express();
-
-const dbConnString = process.env.LOG_DB_CONNECTION_STRING || "mongodb+srv://backupLogDB:9SEnbWEu2qmGRYpo@cluster0-ljo1h.mongodb.net/backupLogDB?retryWrites=true&w=majority";
-winston.add(new winston.transports.MongoDB({
-    db: dbConnString,
-    options: {
-        useUnifiedTopology: true
-    },
-    collection: 'partnerLogs',
-    storeHost: true
-}));
-winston.add(new winston.transports.File({
-    filename: 'partnerLogs.log'
-}));
 
 // Overwrite res.send
 app.use(apiLogger);
