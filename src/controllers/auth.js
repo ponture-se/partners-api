@@ -2,19 +2,30 @@ const axios = require("axios");
 const qs = require("qs");
 const jwt = require("jsonwebtoken");
 const cnf = require("../config");
+
+
 function verifyToken(req, res, next) {
+  // get proper token from request
   var token = req.headers["x-access-token"];
   if (token == null || !token) {
     token = req.headers["authorization"];
     if (token) token = token.replace("Bearer ", "");
   }
+
+  // Checking the token trusy
   if (!token || token == null)
-    return res.status(403).send({ auth: false, message: "No token provided." });
-  jwt.verify(token, cnf.secret, function(err, decoded) {
+    return res.status(403).send({
+      auth: false,
+      message: "No token provided."
+    });
+  jwt.verify(token, cnf.secret, function (err, decoded) {
     if (err)
       return res
         .status(401)
-        .send({ auth: false, message: "Failed to authenticate token. " });
+        .send({
+          auth: false,
+          message: "Failed to authenticate token. "
+        });
     // if everything good, save to request for use in other routes
     console.log("decoded : ", decoded);
     req.access_token = decoded.access_token;
@@ -40,29 +51,30 @@ function login(req, res, next) {
   };
   console.log(config);
   axios(config)
-    .then(function(response) {
+    .then(function (response) {
       if (response.data.success) {
         console.log(response.data);
-        var token = jwt.sign(
-          {
+        var token = jwt.sign({
             access_token: req.access_token,
             partnerId: response.data.data.partnerId
           },
-          cnf.secret,
-          {
+          cnf.secret, {
             expiresIn: process.env.AUTHENTICATIONTOKEN_EXPIRE_TIME || 120 * 60 // expires in 30 minutes
           }
         );
         res
           .status(200)
-          .send({ access_token: token, userInfo: response.data.data });
+          .send({
+            access_token: token,
+            userInfo: response.data.data
+          });
 
-          return next();
+        return next();
       } else {
         res.status(response.statusCode).send(response);
       }
     })
-    .catch(function(error) {
+    .catch(function (error) {
       res.status(error.response.data.statusCode).send(error.response.data);
     });
 }
@@ -88,12 +100,12 @@ function getRoaringToken(req, res, next) {
   };
   console.log(config);
   axios(config)
-    .then(function(response) {
+    .then(function (response) {
       console.log(response.data.access_token);
       req.access_token = response.data.access_token;
       next();
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
       res.status(400).send(error);
     });
@@ -124,12 +136,12 @@ function getSFToken(req, res, next) {
   };
   console.log(config);
   axios(config)
-    .then(function(response) {
+    .then(function (response) {
       console.log("token : " + response.data.access_token);
       req.access_token = response.data.access_token;
       next();
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
       res.status(400).send(error);
     });
