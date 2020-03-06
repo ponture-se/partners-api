@@ -59,7 +59,7 @@ exports.getCloseReasons = function (req, res, next) {
           res.status(500).send(error.message);
         }
         console.log(error.config);
-        res.status(400).send(error.config);
+        // res.status(400).send(error.config);
       });
   }
 };
@@ -117,7 +117,7 @@ exports.getNewApplications = function (req, res, next) {
           res.status(500).send(error.message);
         }
         console.log(error.config);
-        res.status(400).send(error.config);
+        // res.status(400).send(error.config);
       });
   }
 };
@@ -174,7 +174,7 @@ exports.getOpenedApplications = function (req, res, next) {
           res.status(500).send(error.message);
         }
         console.log(error.config);
-        res.status(400).send(error.config);
+        // res.status(400).send(error.config);
       });
   }
 };
@@ -234,7 +234,7 @@ exports.openApplication = function (req, res, next) {
           res.status(500).send(error.message);
         }
         console.log(error.config);
-        res.status(400).send(error.config);
+        // res.status(400).send(error.config);
       });
   }
 };
@@ -291,7 +291,7 @@ exports.rejectApplication = function (req, res, next) {
           res.status(500).send(error.message);
         }
         console.log(error.config);
-        res.status(400).send(error.config);
+        // res.status(400).send(error.config);
       });
   }
 };
@@ -339,6 +339,6 @@ exports.getCreditReport = function (req, res, next) {
         res.status(500).send(error.message);
       }
       console.log(error.config);
-      res.status(400).send(error.config);
+      // res.status(400).send(error.config);
     });
 };
