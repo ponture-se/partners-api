@@ -8,7 +8,7 @@ var error_result = {
   statusCode: 400
 };
 
-exports.getCloseReasons = function(req, res, next) {
+exports.getCloseReasons = function (req, res, next) {
   if (!req.partnerId) {
     var err = error_result;
     err.message = "PartnerID is invalid";
@@ -32,14 +32,14 @@ exports.getCloseReasons = function(req, res, next) {
   };
   console.log(config);
   axios(config)
-    .then(function(response) {
+    .then(function (response) {
       if (response.data.success) res.send(response.data);
       else
         res
-          .status(response.data.statusCode ? response.data.statusCode : 200)
-          .send(response.data);
+        .status(response.data.statusCode ? response.data.statusCode : 200)
+        .send(response.data);
     })
-    .catch(function(error) {
+    .catch(function (error) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -62,7 +62,7 @@ exports.getCloseReasons = function(req, res, next) {
       res.status(400).send(error.config);
     });
 };
-exports.getNewApplications = function(req, res, next) {
+exports.getNewApplications = function (req, res, next) {
   if (!req.partnerId) {
     var err = error_result;
     err.message = "PartnerID is invalid";
@@ -87,14 +87,14 @@ exports.getNewApplications = function(req, res, next) {
   };
   console.log(config);
   axios(config)
-    .then(function(response) {
+    .then(function (response) {
       if (response.data.success) res.send(response.data);
       else
         res
-          .status(response.data.statusCode ? response.data.statusCode : 200)
-          .send(response.data);
+        .status(response.data.statusCode ? response.data.statusCode : 200)
+        .send(response.data);
     })
-    .catch(function(error) {
+    .catch(function (error) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -118,7 +118,7 @@ exports.getNewApplications = function(req, res, next) {
     });
 };
 
-exports.getOpenedApplications = function(req, res, next) {
+exports.getOpenedApplications = function (req, res, next) {
   if (!req.partnerId) {
     var err = error_result;
     err.message = "PartnerID is invalid";
@@ -143,14 +143,14 @@ exports.getOpenedApplications = function(req, res, next) {
   };
   console.log(config);
   axios(config)
-    .then(function(response) {
+    .then(function (response) {
       if (response.data.success) res.send(response.data);
       else
         res
-          .status(response.data.statusCode ? response.data.statusCode : 200)
-          .send(response.data);
+        .status(response.data.statusCode ? response.data.statusCode : 200)
+        .send(response.data);
     })
-    .catch(function(error) {
+    .catch(function (error) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -174,7 +174,7 @@ exports.getOpenedApplications = function(req, res, next) {
     });
 };
 
-exports.openApplication = function(req, res, next) {
+exports.openApplication = function (req, res, next) {
   if (!req.partnerId) {
     var err = error_result;
     err.message = "PartnerID is invalid";
@@ -203,14 +203,14 @@ exports.openApplication = function(req, res, next) {
   };
   console.log(config);
   axios(config)
-    .then(function(response) {
+    .then(function (response) {
       if (response.data.success) res.send(response.data);
       else
         res
-          .status(response.data.statusCode ? response.data.statusCode : 200)
-          .send(response.data);
+        .status(response.data.statusCode ? response.data.statusCode : 200)
+        .send(response.data);
     })
-    .catch(function(error) {
+    .catch(function (error) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -234,7 +234,7 @@ exports.openApplication = function(req, res, next) {
     });
 };
 
-exports.rejectApplication = function(req, res, next) {
+exports.rejectApplication = function (req, res, next) {
   if (!req.partnerId) {
     var err = error_result;
     err.message = "PartnerID is invalid";
@@ -260,14 +260,14 @@ exports.rejectApplication = function(req, res, next) {
   };
   console.log(config);
   axios(config)
-    .then(function(response) {
+    .then(function (response) {
       if (response.data.success) res.send(response.data);
       else
         res
-          .status(response.data.statusCode ? response.data.statusCode : 200)
-          .send(response.data);
+        .status(response.data.statusCode ? response.data.statusCode : 200)
+        .send(response.data);
     })
-    .catch(function(error) {
+    .catch(function (error) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -291,7 +291,7 @@ exports.rejectApplication = function(req, res, next) {
     });
 };
 
-exports.getCreditReport = function(req, res, next) {
+exports.getCreditReport = function (req, res, next) {
   var accessToken = req.access_token;
   var apiRoot =
     process.env.SALESFORCE_API_ROOT ||
@@ -307,14 +307,14 @@ exports.getCreditReport = function(req, res, next) {
   };
   console.log(config);
   axios(config)
-    .then(function(response) {
+    .then(function (response) {
       if (response.data.success) res.send(response.data);
       else
         res
-          .status(response.data.statusCode ? response.data.statusCode : 200)
-          .send(response.data);
+        .status(response.data.statusCode ? response.data.statusCode : 200)
+        .send(response.data);
     })
-    .catch(function(error) {
+    .catch(function (error) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
