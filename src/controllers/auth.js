@@ -56,6 +56,8 @@ function login(req, res, next) {
         res
           .status(200)
           .send({ access_token: token, userInfo: response.data.data });
+
+          return next();
       } else {
         res.status(response.statusCode).send(response);
       }
