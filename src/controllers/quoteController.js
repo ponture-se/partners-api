@@ -90,6 +90,9 @@ exports.getPartnerOfferColumns = function(req, res, next) {
       // res.status(400).send(error.config);
     });
 };
+
+
+
 exports.issueOffer = function(req, res, next) {
   var accessToken = req.access_token;
   var apiRoot =
@@ -130,7 +133,7 @@ exports.issueOffer = function(req, res, next) {
         res.status(500).send(error.message);
       }
       console.log(error.config);
-      res.status(400).send(error.config);
+      // res.status(400).send(error.config);
     });
 };
 
