@@ -364,7 +364,7 @@ exports.fundedapplications = function(req, res, next) {
         res.status(500).send(error.message);
       }
       console.log(error.config);
-      res.status(400).send(error.config);
+      // res.status(400).send(error.config);
     });
 };
 
