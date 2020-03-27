@@ -451,3 +451,13 @@ exports.acceptOffer = function(req, res, next) {
       res.status(400).send(error.config);
     });
 };
+
+async function fundAppController (sfConn, offerId, partnerId) {
+	let params = '?offerId=' + offerId + '&partnerId=' + partnerId;
+	
+	// Error handeled in parent
+	let result = await sfConn.apex.put('/fundApp' + params);
+
+	return result;
+}
+exports.fundAppController = fundAppController;
