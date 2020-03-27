@@ -245,9 +245,14 @@ exports.rejectApplication = function(req, res, next) {
     err.message = "PartnerID is invalid";
     res.status(400).send(err);
   }
-  if (!req.body.oppId) {
+  // if (!req.body.oppId) {
+  //   var err = error_result;
+  //   err.message = "Opportunity is invalid";
+  //   res.status(400).send(err);
+  // }
+  if (!req.body.spoId) {
     var err = error_result;
-    err.message = "Opportunity is invalid";
+    err.message = "spoId is invalid";
     res.status(400).send(err);
   }
   var accessToken = req.access_token;
