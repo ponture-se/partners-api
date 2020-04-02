@@ -1,4 +1,7 @@
 const jsforce = require('jsforce');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 
 async function getRecordTypeId(sfConn, sObjName, recordTypeName){
