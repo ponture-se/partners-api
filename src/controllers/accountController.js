@@ -1,5 +1,6 @@
 const myToolkit = require('./myToolkit');
-const { salesforceException } = require('./customeException');
+const { salesforceException, typeException } = require('./customeException');
+const tBoxCtrl = require('./translationBoxController');
 const logger = require('./customeLogger');
 const _ = require('lodash');
 
@@ -78,8 +79,45 @@ function extractActivePartners(partnerList) {
     return activePartners;
 }
 
+async function getPartnersTranslationBoxByCobjName(cObjNamesList, sfConn = null) {
+    let lang = 'sv';
+    let trMap = {};
+
+    if (!Array.isArray(cObjNamesList)) {
+        throw new typeException('cObjNamesList should be Array');
+    }
+
+    sfConn = (sfConn) ? sfConn : await myToolkit.makeSFConnection();
+    if (sfConn == null) {
+        throw new Error('CAN NOT MAKE SF CONNECTION');
+    }
+    
+    
+    for (let i in cObjNamesList) {
+        let cObjName = cObjNamesList[i];
+        try{
+
+            let trList = await tBoxCtrl.getSinglePartnerTranslationBox(cObjName, lang, sfConn);
+            trMap[cObjName] = {
+                success: true,
+                result: trList
+            };
+
+        } catch (err) {
+
+            trMap[cObjName] = {
+                success: false
+            };
+
+        }
+    }
+
+    return trMap;
+}
+
 
 module.exports = {
     getAllPartnersAccount,
-    extractActivePartners
+    extractActivePartners,
+    getPartnersTranslationBoxByCobjName
 }
