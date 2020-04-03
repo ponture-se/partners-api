@@ -1,6 +1,7 @@
 const myToolkit = require('./myToolkit');
 const { salesforceException } = require('./customeException');
 const logger = require('./customeLogger');
+const _ = require('lodash');
 
 /**
  * This function return a list of partners' account, with all primitive field.
@@ -49,7 +50,36 @@ async function getAllPartnersAccount(sfConn = null) {
     return result;
 }
 
+/**
+ * This function return a list of Active partners' account, with all primitive field.
+ * 
+ * Plus two objects, namely, Products_Master__r, Partners_Rules__r of that partners if exist.
+ * 
+ * @param{object} partnerList - A List of Partners with at least: orgNumber, Partner_Rules, Product_Master
+ * 
+ * Abbas
+ */
+function extractActivePartners(partnerList) {
+    let activePartners = [];
+    
+    for(let index in partnerList) {
+        let partnerId = partnerList[index].Organization_Number__c;
+        let partnerRules = partnerList[index].Partners_Rules__r;
+        let productMaster = partnerList[index].Products_Master__r;
+
+        if (partnerId != null && partnerId.trim() != '' &&
+            partnerRules != null && partnerRules.totalSize != null && partnerRules.totalSize > 0 && partnerRules.records != null && _.size(partnerRules) > 0 &&
+            productMaster != null && productMaster.totalSize != null && productMaster.totalSize > 0 && productMaster.records != null && _.size(productMaster) > 0) {
+                activePartners.push(partnerList[index]);
+            }
+
+    }
+
+    return activePartners;
+}
+
 
 module.exports = {
-    getAllPartnersAccount
+    getAllPartnersAccount,
+    extractActivePartners
 }
