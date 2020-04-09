@@ -28,6 +28,33 @@ async function getProdcutsOfAllPartnersWithDetailsWhere(sfConn, whereClause = {}
 }
 
 
+async function getProdcutsWithDetailsWhere_specificPartner(sfConn, wherePartner = {}, whereClause = {}) {
+    // Section: Getting MetaData
+    let partnersList = await accCtrl.getPartnersAccountWhich(sfConn, wherePartner);
+    let activePartnerList = accCtrl.extractActivePartners(partnersList);    // have orgNumber, productMaster, and partnerRules
+
+    //      Get SF Custom Object Names of Active Partners from their Product Master Records
+    let partnerPMasterMap = generatePartnerProductMasterMap(activePartnerList);
+    let cObjNameList = Object.values(partnerPMasterMap);
+
+    //      Get List of Custome Fields for each partner, based on their custom sObject Name
+    let trBoxPerCobjName = await accCtrl.getPartnersTranslationBoxByCobjName(cObjNameList, sfConn);
+
+    //      Get Metadata of relationships
+    let productDetailsObjApiNamePerPartner = generateProductDetailsObjApiNamePerPartnerId(partnerPMasterMap, trBoxPerCobjName);
+    let productChildsApiRelMap = await getProductChildsApiRelMap(sfConn);
+
+    // Section: Main Query
+    let productsList = await getDesiredResultPerPartnerApiCall(sfConn, productDetailsObjApiNamePerPartner, productChildsApiRelMap, whereClause);
+
+    return {
+        productsList: productsList,
+        trBoxPerCobjName: trBoxPerCobjName,
+        partnerPMasterMap: partnerPMasterMap
+    };
+}
+
+
 
 function generatePartnerProductMasterMap(activePartnerList) {
     let result = {};
