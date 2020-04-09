@@ -1,4 +1,5 @@
 const accCtrl = require('./accountController');
+const logger = require('./customeLogger');
 const _ = require('lodash');
 
 async function getProdcutsOfAllPartnersWithDetailsWhere(sfConn, whereClause = {}) {
@@ -52,6 +53,20 @@ async function getProdcutsWithDetailsWhere_specificPartner(sfConn, wherePartner 
         trBoxPerCobjName: trBoxPerCobjName,
         partnerPMasterMap: partnerPMasterMap
     };
+}
+
+async function getProductsWhere(sfConn, whereClause) {
+
+    try{
+        let productList = await sfConn.sobject("Product__c")
+                                        .select("*")
+                                        .where(whereClause)
+                                        .execute();
+        return productList;
+    } catch (e) {
+        logger.error('getProductsWhere Func Error', {metadata: e});
+        throw e;
+    }
 }
 
 
@@ -267,5 +282,7 @@ async function getProductWithDetailsByPartnerIdAndcObjName(sfConn, partnerId, cu
 
 
 module.exports = {
-    getProdcutsOfAllPartnersWithDetailsWhere
+    getProdcutsOfAllPartnersWithDetailsWhere,
+    getProdcutsWithDetailsWhere_specificPartner,
+    getProductsWhere
 }
