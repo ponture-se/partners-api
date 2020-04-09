@@ -18,23 +18,32 @@ async function acceptedOfferCanceledController(sfConn, oppId) {
         stage__c: {$in: proActiveStage}
     }
 
-    let productsObject = await productCtrl.getProdcutsOfAllPartnersWithDetailsWhere(sfConn, whereClause);
+    // get offers main data
+    let offersMainData = await productCtrl.getProductsWhere(sfConn, whereClause);
+    if (offersMainData == null || offersMainData.length == 0) {
+        return null;
+    }
+    
+    let desiredPartnerId = _.compact(_.map(offersMainData, o => {
+        return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
+    }));
+    let partnerWhere = {
+        id: {$in: desiredPartnerId}
+    }
+
+    let productsObject = await productCtrl.getProdcutsWithDetailsWhere_specificPartner(sfConn, partnerWhere, whereClause);
     let productsList = productsObject.productsList;
     let partnerPMasterMap = productsObject.partnerPMasterMap;
     let trBoxPerCobjName = productsObject.trBoxPerCobjName;
 
     
     // Section: Send Mail if any product exist
-    console.log("Products List", productsList);
     if (productsList.length > 0) {
         let perPartnerShowInList = generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForProducts(productsList, perPartnerShowInList, 1);
-
-        // try{
+        
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
-        // } catch (e) {
-        //     console.log(e);
-        // }
+        
     }
 
     return null;

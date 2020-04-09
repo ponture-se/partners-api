@@ -15,7 +15,7 @@ async function acceptedOfferCanceledApi(req, res, next) {
 
         await triggerCtrl.acceptedOfferCanceledController(sfConn, oppId);
 
-        resBody = myResponse(true, null, 200, 'Emails are Sending.');
+        resBody = myResponse(true, null, 200, 'Emails Send To SF API.');
         res.status(200).send(resBody);
 
     } catch (e) {
