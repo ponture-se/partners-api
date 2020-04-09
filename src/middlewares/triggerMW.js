@@ -9,12 +9,27 @@ async function acceptedOfferCanceledApi(req, res, next) {
     let sfConn = req.needs.sfConn,
         oppId = req.query.oppId;
 
-    let result = await triggerCtrl.acceptedOfferCanceledController(sfConn, oppId);
+    let resBody;
+    
+    try {
+
+        await triggerCtrl.acceptedOfferCanceledController(sfConn, oppId);
+
+        resBody = myResponse(true, null, 200, 'Emails are Sending.');
+        res.status(200).send(resBody);
+
+    } catch (e) {
+
+        resBody = myResponse(false, null, 500, 'Something Went Wrong', e);
+        res.status(500).send(resBody);
+
+    }
+    
 }
 
 
 module.exports = {
-    prepareDataAPI
+    acceptedOfferCanceledApi
 }
 
 
