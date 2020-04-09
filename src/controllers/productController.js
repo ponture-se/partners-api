@@ -59,7 +59,11 @@ async function getProductsWhere(sfConn, whereClause) {
 
     try{
         let productList = await sfConn.sobject("Product__c")
-                                        .select("*")
+                                        .select("*" +
+                                                ', Supplier_Partner_Opportunity__r.SupplierAccountId__c' +
+                                                ', Supplier_Partner_Opportunity__r.SupplierAccountId__r.Organization_Number__c' +
+                                                ', Supplier_Partner_Opportunity__r.SupplierAccountId__r.Name'
+                                        )
                                         .where(whereClause)
                                         .execute();
         return productList;
