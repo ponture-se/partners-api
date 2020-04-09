@@ -29,7 +29,7 @@ async function getAllPartnersAccount(sfConn = null) {
     // Get "Supplier Partner" RecordTypeId
     let partnerRecordTypeId = await myToolkit.getRecordTypeId(sfConn, 'Account', 'Supplier Partner');
     if (partnerRecordTypeId == null) {
-        throw new Error('Could not get Supplier Partnet Id.');
+        throw new Error('Could not get Supplier Partner Id.');
     }
 
     try{
