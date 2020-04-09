@@ -20,7 +20,11 @@ async function getProdcutsOfAllPartnersWithDetailsWhere(sfConn, whereClause = {}
     // Section: Main Query
     let productsList = await getDesiredResultPerPartnerApiCall(sfConn, productDetailsObjApiNamePerPartner, productChildsApiRelMap, whereClause);
 
-    return productsList;
+    return {
+        productsList: productsList,
+        trBoxPerCobjName: trBoxPerCobjName,
+        partnerPMasterMap: partnerPMasterMap
+    };
 }
 
 
