@@ -191,6 +191,8 @@ async function getProductWithDetailsByPartnerIdAndcObjName(sfConn, partnerId, cu
                                         ', Supplier_Partner_Opportunity__r.OpportunityId__r.PrimaryContact__c' +
                                         ', Supplier_Partner_Opportunity__r.OpportunityId__r.PrimaryContact__r.Email' +
                                         ', Supplier_Partner_Opportunity__r.SupplierAccountId__c' +
+                                        ', Supplier_Partner_Opportunity__r.SupplierAccountId__r.Organization_Number__c' +
+                                        ', Supplier_Partner_Opportunity__r.SupplierAccountId__r.Name' +
                                         ', Supplier_Partner_Opportunity__r.SupplierAccountId__r.Email__c'
                                     )
                                         .include(customObjectApiName)
