@@ -7,11 +7,13 @@ async function fundAppApi(req, res, next) {
     let resBody;
 
     let offerId = req.query.offerId,
+        loanAmount = req.query.loanAmount,
+        loanPeriod = req.query.loanPeriod,
         partnerId = req.partnerId;
 
     try {
-        let result = await quoteController.fundAppController(sfConn, offerId, partnerId);
-        resBody = myResponse(true, result, 200);
+        resBody = await quoteController.fundAppController(sfConn, offerId, partnerId, loanAmount, loanPeriod);
+        // resBody = myResponse(true, result, 200);
     } catch(e) {
         resBody = myResponse(false, null, e.statusCode, e.message, e);
     }
