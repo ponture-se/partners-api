@@ -6,9 +6,25 @@ const { salesforceException } = require('../controllers/customeException');
 
 
 
+async function sendYesterdayAcceptedPartnerInfoApi(req, res, next) {
+    let sfConn = req.needs.sfConn;
+
+    let resBody;
+    try{
+        await triggerCtrl.sendYesterdayAcceptedPartnerInfoController(sfConn);
+        resBody = myResponse(true, null, 200, 'Emails are Sent to SF API.');
+        res.status(200).send(resBody);
+    } catch (e) {
+        resBody = myResponse(false, null, 500, 'Something Went Wrong.', e);
+        res.status(500).send(resBody);
+    }
+
+    return next();
+    
+}
 
 module.exports = {
-    
+    sendYesterdayAcceptedPartnerInfoApi
 }
 
 
