@@ -5,7 +5,10 @@ const getSFConnection = require("../middlewares/sfMiddleware");
 
 
 
-
+router.post('/realTimeEmailAfterAcceptance', 
+            // todo: validation
+            getSFConnection,
+            triggerMW.realTimeEmailAfterAcceptanceApi)
 
 
 module.exports = router;
