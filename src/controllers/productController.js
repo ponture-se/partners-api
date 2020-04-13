@@ -1,4 +1,5 @@
 const accCtrl = require('./accountController');
+const logger = require('./customeLogger');
 const _ = require('lodash');
 
 async function getProdcutsOfAllPartnersWithDetailsWhere(sfConn, whereClause = {}) {
@@ -20,7 +21,56 @@ async function getProdcutsOfAllPartnersWithDetailsWhere(sfConn, whereClause = {}
     // Section: Main Query
     let productsList = await getDesiredResultPerPartnerApiCall(sfConn, productDetailsObjApiNamePerPartner, productChildsApiRelMap, whereClause);
 
-    return productsList;
+    return {
+        productsList: productsList,
+        trBoxPerCobjName: trBoxPerCobjName,
+        partnerPMasterMap: partnerPMasterMap
+    };
+}
+
+
+async function getProdcutsWithDetailsWhere_specificPartner(sfConn, wherePartner = {}, whereClause = {}) {
+    // Section: Getting MetaData
+    let partnersList = await accCtrl.getPartnersAccountWhich(sfConn, wherePartner);
+    let activePartnerList = accCtrl.extractActivePartners(partnersList);    // have orgNumber, productMaster, and partnerRules
+
+    //      Get SF Custom Object Names of Active Partners from their Product Master Records
+    let partnerPMasterMap = generatePartnerProductMasterMap(activePartnerList);
+    let cObjNameList = Object.values(partnerPMasterMap);
+
+    //      Get List of Custome Fields for each partner, based on their custom sObject Name
+    let trBoxPerCobjName = await accCtrl.getPartnersTranslationBoxByCobjName(cObjNameList, sfConn);
+
+    //      Get Metadata of relationships
+    let productDetailsObjApiNamePerPartner = generateProductDetailsObjApiNamePerPartnerId(partnerPMasterMap, trBoxPerCobjName);
+    let productChildsApiRelMap = await getProductChildsApiRelMap(sfConn);
+
+    // Section: Main Query
+    let productsList = await getDesiredResultPerPartnerApiCall(sfConn, productDetailsObjApiNamePerPartner, productChildsApiRelMap, whereClause);
+
+    return {
+        productsList: productsList,
+        trBoxPerCobjName: trBoxPerCobjName,
+        partnerPMasterMap: partnerPMasterMap
+    };
+}
+
+async function getProductsWhere(sfConn, whereClause) {
+
+    try{
+        let productList = await sfConn.sobject("Product__c")
+                                        .select("*" +
+                                                ', Supplier_Partner_Opportunity__r.SupplierAccountId__c' +
+                                                ', Supplier_Partner_Opportunity__r.SupplierAccountId__r.Organization_Number__c' +
+                                                ', Supplier_Partner_Opportunity__r.SupplierAccountId__r.Name'
+                                        )
+                                        .where(whereClause)
+                                        .execute();
+        return productList;
+    } catch (e) {
+        logger.error('getProductsWhere Func Error', {metadata: e});
+        throw e;
+    }
 }
 
 
@@ -187,6 +237,8 @@ async function getProductWithDetailsByPartnerIdAndcObjName(sfConn, partnerId, cu
                                         ', Supplier_Partner_Opportunity__r.OpportunityId__r.PrimaryContact__c' +
                                         ', Supplier_Partner_Opportunity__r.OpportunityId__r.PrimaryContact__r.Email' +
                                         ', Supplier_Partner_Opportunity__r.SupplierAccountId__c' +
+                                        ', Supplier_Partner_Opportunity__r.SupplierAccountId__r.Organization_Number__c' +
+                                        ', Supplier_Partner_Opportunity__r.SupplierAccountId__r.Name' +
                                         ', Supplier_Partner_Opportunity__r.SupplierAccountId__r.Email__c'
                                     )
                                         .include(customObjectApiName)
@@ -234,5 +286,7 @@ async function getProductWithDetailsByPartnerIdAndcObjName(sfConn, partnerId, cu
 
 
 module.exports = {
-    getProdcutsOfAllPartnersWithDetailsWhere
+    getProdcutsOfAllPartnersWithDetailsWhere,
+    getProdcutsWithDetailsWhere_specificPartner,
+    getProductsWhere
 }
