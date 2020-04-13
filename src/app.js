@@ -24,6 +24,7 @@ app.use(cors());
 var opportunity = require('./routes/opportunity');
 var auth = require('./routes/auth');
 var quote = require('./routes/quote');
+var trigger = require('./routes/trigger');
 // a middleware function with no mount path. This code is executed for every request to the router
 
 app.use(logger('dev'));
@@ -34,5 +35,6 @@ app.use(cookieParser());
 app.use("/auth", auth);
 app.use("/opportunity", opportunity);
 app.use("/quote", quote);
+app.use("/trigger", trigger);
 
 module.exports = app;
