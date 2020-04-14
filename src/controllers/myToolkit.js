@@ -44,10 +44,32 @@ async function makeSFConnection(){
     }
 }
 
+function convertDatetimeToSwedenLocale(isoDatetime) {
+    let newDatetime = new Date(isoDatetime).toLocaleString('en-US', {
+                                                                        timeZone: "Europe/Stockholm",
+                                                                        dateStyle: "short",
+                                                                        timeStyle: "short",
+                                                                        hour12: false
+                                                                    });
+
+    return newDatetime;
+}
+
+function getHourOfDateString(convertedDate) {
+    let hour = convertedDate.substring(
+                                convertedDate.indexOf(',') + 1,
+                                convertedDate.indexOf(':')
+                            )
+                            .trim();
+
+    return parseInt(hour);
+}
 
 
 module.exports = {
     addPairToReqNeeds,
     makeSFConnection,
-    getRecordTypeId
+    getRecordTypeId,
+    convertDatetimeToSwedenLocale,
+    getHourOfDateString
 }
