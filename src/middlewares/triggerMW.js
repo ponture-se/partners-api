@@ -15,6 +15,15 @@ async function sendActiveOffersToCustomerApi(req, res, next) {
             case 3:
                 await triggerCtrl.sendActiveOffersToCustomerController_case3(sfConn);       
                 break;
+            case 4:
+                await triggerCtrl.sendActiveOffersToCustomerController_case4(sfConn);       
+                break;
+            case 5:
+                await triggerCtrl.sendActiveOffersToCustomerController_case5(sfConn);       
+                break;
+            case 6:
+                await triggerCtrl.sendActiveOffersToCustomerController_case6(sfConn);       
+                break;
     
             default:
                 invalidCaseNum = true;
