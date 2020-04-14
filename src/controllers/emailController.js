@@ -2,6 +2,26 @@ const _ = require('lodash');
 const logger = require('./customeLogger');
 
 
+function prepareEmailForTrigger3(productsList, perPartnerShowInList) {
+    // FIXME: Mock Mail
+    let emailsList = [];
+
+    let productsPerOpp = _.groupBy(productsList, 'Supplier_Partner_Opportunity__r.OpportunityId__c');
+
+    let subject = "Trigger #2";
+
+    for (let [key, value] of Object.entries(productsPerOpp)) {
+        let toAddr = _.get(value, ['0', 'Supplier_Partner_Opportunity__r','OpportunityId__r','PrimaryContact__r','Email']);
+        let whatId = key;
+        let body = JSON.stringify(value, null, 2);
+
+        emailsList.push(createMailObject(toAddr, subject, body, whatId));
+      }
+
+    return emailsList;
+}
+
+
 function createMailObject(to, subject, body, whatId = null) {
 
     return {
@@ -27,5 +47,6 @@ async function callSfSendMailAPI(sfConn, emailsList) {
 }
 
 module.exports = {
-    callSfSendMailAPI
+    callSfSendMailAPI,
+    prepareEmailForTrigger3
 }
