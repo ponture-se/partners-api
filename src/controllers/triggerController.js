@@ -89,7 +89,7 @@ async function sendActiveOffersToCustomerController_case3(sfConn) {
     // Section: email Section
     if (productsList.length > 0) {
         let perPartnerShowInList = generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName);
-        let emailsList = emailCtrl.prepareEmailForTrigger3(productsList, perPartnerShowInList);
+        let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInList);
         
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
         
