@@ -22,6 +22,30 @@ function prepareEmailForTrigger7(productList, perPartnerShowInList) {
     });
 
     return emailsList;
+
+}
+
+
+function prepareEmailForTrigger2(productList) {
+    // FIXME: Mock MAIL
+    let emailsList = [];
+
+    let subject = 'Partner Info By Trigger 2';
+
+    productList.forEach(pro => {
+        let primaryContact = _.get(pro, 'Supplier_Partner_Opportunity__r.OpportunityId__r.PrimaryContact__r');
+
+        let contactEmail = (primaryContact) ? _.get(primaryContact, 'Email') : null;
+        let whatId = _.get(pro, 'Supplier_Partner_Opportunity__r.OpportunityId__c', null);
+
+        let body = JSON.stringify(_.get(pro, 'Supplier_Partner_Opportunity__r.SupplierAccountId__r', 'NO INFORMATION FOUND'), null, 2);
+
+        if (contactEmail) {
+            emailsList.push(createMailObject(contactEmail, subject, body, whatId));
+        }
+    });
+
+    return emailsList;
 }
 
 
@@ -38,7 +62,6 @@ function createMailObject(to, subject, body, whatId = null) {
 
 
 async function callSfSendMailAPI(sfConn, emailsList) {
-    console.log("emailsList", emailsList);
     let reqBody = {
         emailsList : emailsList
     }
@@ -51,5 +74,6 @@ async function callSfSendMailAPI(sfConn, emailsList) {
 
 module.exports = {
     callSfSendMailAPI,
-    prepareEmailForTrigger7
+    prepareEmailForTrigger7,
+    prepareEmailForTrigger2
 }

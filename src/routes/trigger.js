@@ -4,6 +4,12 @@ var triggerMW = require("../middlewares/triggerMW");
 const getSFConnection = require("../middlewares/sfMiddleware");
 
 
+// Trigger 2
+router.post("/sendYesterdayAcceptedPartnerInfo",
+            // todo: add validation
+            getSFConnection,
+            triggerMW.sendYesterdayAcceptedPartnerInfo
+            )
 
 router.post('/realTimeEmailAfterAcceptance', 
             // todo: validation
