@@ -9,12 +9,18 @@ router.post("/sendYesterdayAcceptedPartnerInfo",
             // todo: add validation
             getSFConnection,
             triggerMW.sendYesterdayAcceptedPartnerInfo
-            )
+            );
 
 router.post('/realTimeEmailAfterAcceptance', 
             // todo: validation
             getSFConnection,
-            triggerMW.realTimeEmailAfterAcceptanceApi)
+            triggerMW.realTimeEmailAfterAcceptanceApi);
+// Trigger #3,4,5,6
+router.post('/sendActiveOffersToCustomer',
+            // todo: validation,
+            getSFConnection,
+            triggerMW.sendActiveOffersToCustomerApi);
+
 
 
 module.exports = router;
