@@ -1,19 +1,9 @@
 const _ = require('lodash');
 const logger = require('./customeLogger');
 
-function prepareEmailForProducts(productsList, perPartnerShowInList, caseNumber) {
+function prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInList) {
     let emailList = [];
 
-    if (caseNumber == 1) {
-        emailList = prepareEmailsForTrigger1(productsList, perPartnerShowInList);
-    } 
-
-
-    return emailList;
-}
-
-function prepareEmailsForTrigger1(productsList, perPartnerShowInList) {
-    let emailList = [];
     // Note: Example for Customer Email. 
     let emailTo = _.get(productsList, ['0', 'Supplier_Partner_Opportunity__r', 'OpportunityId__r', 'PrimaryContact__r','Email']);
     let emailSubject = 'You Still Have Some Offers for Your Application';
@@ -67,7 +57,7 @@ function prepareEmailsForTrigger1(productsList, perPartnerShowInList) {
 
     emailBody += '</table>'+
                 '</body></html>';
-
+// todo: use function to prepare email Object
     emailList.push(
         {
             to: emailTo,
@@ -94,6 +84,6 @@ async function callSfSendMailAPI(sfConn, emailsList) {
 }
 
 module.exports = {
-    prepareEmailForProducts,
+    prepareEmailsForacceptedOfferCancelling,
     callSfSendMailAPI
 }
