@@ -15,11 +15,17 @@ router.post('/realTimeEmailAfterAcceptance',
             // todo: validation
             getSFConnection,
             triggerMW.realTimeEmailAfterAcceptanceApi);
+
 // Trigger #3,4,5,6
 router.post('/sendActiveOffersToCustomer',
             // todo: validation,
             getSFConnection,
             triggerMW.sendActiveOffersToCustomerApi);
+
+router.post('/sendOverviewToPartners', 
+            // todo: validation
+            getSFConnection,
+            triggerMW.sendOverviewToPartners_EmailTriggerApi);
 
 
 
