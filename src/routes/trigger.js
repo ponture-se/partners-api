@@ -8,7 +8,13 @@ const getSFConnection = require("../middlewares/sfMiddleware");
 router.post('/realTimeEmailAfterAcceptance', 
             // todo: validation
             getSFConnection,
-            triggerMW.realTimeEmailAfterAcceptanceApi)
+            triggerMW.realTimeEmailAfterAcceptanceApi);
+            
+router.post('/sendOverviewToPartners', 
+            // todo: validation
+            getSFConnection,
+            triggerMW.sendOverviewToPartners_EmailTriggerApi);
+
 
 
 module.exports = router;
