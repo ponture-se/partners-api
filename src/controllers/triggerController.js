@@ -11,6 +11,50 @@ const jsforce = require('jsforce');
 const myToolkit = require('./myToolkit');
 
 
+async function acceptedOfferCanceledController(sfConn, oppId) {
+    // Section: Get Offers with details
+    const proActiveStage = [
+        'Offer Issued',
+        'Offer Accepted'
+    ]
+
+    const whereClause = {
+        "Supplier_Partner_Opportunity__r.OpportunityId__c": oppId,
+        stage__c: {$in: proActiveStage}
+    }
+
+    // get offers main data
+    let offersMainData = await productCtrl.getProductsWhere(sfConn, whereClause);
+    if (offersMainData == null || offersMainData.length == 0) {
+        return null;
+    }
+    
+    let desiredPartnerId = _.compact(_.map(offersMainData, o => {
+        return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
+    }));
+    let partnerWhere = {
+        id: {$in: desiredPartnerId}
+    }
+
+    let productsObject = await productCtrl.getProdcutsWithDetailsWhere_specificPartner(sfConn, partnerWhere, whereClause);
+    let productsList = productsObject.productsList;
+    let partnerPMasterMap = productsObject.partnerPMasterMap;
+    let trBoxPerCobjName = productsObject.trBoxPerCobjName;
+
+    
+    // Section: Send Mail if any product exist
+    if (productsList.length > 0) {
+        let perPartnerShowInList = generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName);
+        let emailsList = emailCtrl.prepareEmailForProducts(productsList, perPartnerShowInList, 1);
+        
+        emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+        
+    }
+
+    return null;
+    // return productList;
+}
+
 async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
     if (proIdList == null || proIdList.length == 0) {
         return;
@@ -577,6 +621,7 @@ function generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName) {
 
 
 module.exports = {
+    acceptedOfferCanceledController,
     sendYesterdayAcceptedPartnerInfoController,
     sendActiveOffersToCustomerController_case3,
     sendActiveOffersToCustomerController_case4,

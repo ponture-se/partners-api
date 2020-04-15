@@ -26,6 +26,13 @@ router.post('/sendOverviewToPartners',
             // todo: validation
             getSFConnection,
             triggerMW.sendOverviewToPartners_EmailTriggerApi);
+// Trigger #1
+router.post('/acceptedOfferCanceled',
+                // todo: validation (check offer to be in list)
+                getSFConnection,
+                triggerMW.acceptedOfferCanceledApi
+                );
+
 
 
 

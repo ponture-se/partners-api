@@ -96,11 +96,37 @@ async function sendActiveOffersToCustomerApi(req, res, next) {
     return next();
 }
 
+
+async function acceptedOfferCanceledApi(req, res, next) {
+    let sfConn = req.needs.sfConn,
+        oppId = req.query.oppId;
+
+    let resBody;
+    
+    try {
+
+        await triggerCtrl.acceptedOfferCanceledController(sfConn, oppId);
+
+        resBody = myResponse(true, null, 200, 'Emails Send To SF API.');
+        res.status(200).send(resBody);
+
+    } catch (e) {
+
+        resBody = myResponse(false, null, 500, 'Something Went Wrong', e);
+        res.status(500).send(resBody);
+
+    }
+    
+}
+
+
+
 module.exports = {
     realTimeEmailAfterAcceptanceApi,
     sendYesterdayAcceptedPartnerInfoApi,
     sendActiveOffersToCustomerApi,
-    sendOverviewToPartners_EmailTriggerApi
+    sendOverviewToPartners_EmailTriggerApi,
+    acceptedOfferCanceledApi
 }
 
 
