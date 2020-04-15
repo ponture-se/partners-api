@@ -622,6 +622,7 @@ function generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName) {
 
 module.exports = {
     acceptedOfferCanceledController,
+    realTimeEmailAfterAcceptanceController,
     sendYesterdayAcceptedPartnerInfoController,
     sendActiveOffersToCustomerController_case3,
     sendActiveOffersToCustomerController_case4,
