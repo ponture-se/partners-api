@@ -7,6 +7,49 @@ const emailCtrl = require('./emailController');
 const _ = require('lodash');
 
 
+async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
+    if (proIdList == null || proIdList.length == 0) {
+        return;
+    }
+    
+    // Section: Get Offers with details
+    const whereClause = {
+        Id: {$in: proIdList}
+    }
+
+    // get offers main data
+    let offersMainData = await productCtrl.getProductsWhere(sfConn, whereClause);
+    if (offersMainData == null || offersMainData.length == 0) {
+        return;
+    }
+    
+    // Get Desired Partner Ids to get Product Details
+    let desiredPartnerId = _.compact(_.map(offersMainData, o => {
+        return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
+    }));
+    let partnerWhere = {
+        id: {$in: desiredPartnerId}
+    }
+
+    let productsObject = await productCtrl.getProdcutsWithDetailsWhere_specificPartner(sfConn, partnerWhere, whereClause);
+    let productsList = productsObject.productsList;
+    let partnerPMasterMap = productsObject.partnerPMasterMap;
+    let trBoxPerCobjName = productsObject.trBoxPerCobjName;
+
+    
+    // Section: Send Mail if any product exist
+    if (productsList.length > 0) {
+        let perPartnerShowInList = generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName);
+        let emailsList = emailCtrl.prepareEmailForTrigger7(productsList, perPartnerShowInList, 1);
+        
+        emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+        
+    }
+
+    return;
+}
+
+
 
 
 function generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName) {
@@ -35,5 +78,5 @@ function generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName) {
 
 
 module.exports = {
-    
+    realTimeEmailAfterAcceptanceController
 }
