@@ -90,8 +90,25 @@ function prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInList) 
     let mainHtmlBodyAddr = staticResource + "\\offersOverview.html";
     let offerTemplateHtmlAddr = staticResource + "\\offerTemplate.html";
 
-    let mainHtmlTemplate = fs.readFileSync(mainHtmlBodyAddr, 'utf8');
-    let offerHtmlTemplate = fs.readFileSync(offerTemplateHtmlAddr, 'utf8');
+    let mainHtmlTemplate,
+        offerHtmlTemplate;
+    try {
+        mainHtmlTemplate = fs.readFileSync(mainHtmlBodyAddr, 'utf8');
+        offerHtmlTemplate = fs.readFileSync(offerTemplateHtmlAddr, 'utf8');
+    } catch (e) {
+        logger.error('readFileSync Error', {metadata: {
+            addrs: [
+                mainHtmlBodyAddr,
+                offerHtmlTemplate
+            ],
+            input: {
+                productList: productsList,
+                perPartnerShowInList: perPartnerShowInList
+            }
+        }});
+        
+        throw e;
+    }
 
 
     for (let [oppId, productList] of Object.entries(productsPerOpp)) {
