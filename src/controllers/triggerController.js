@@ -88,7 +88,9 @@ async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
     // Section: Send Mail if any product exist
     if (productsList.length > 0) {
         let perPartnerShowInList = generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName);
-        emailCtrl.prepareEmailForTrigger7(sfConn, productsList, perPartnerShowInList, 1);
+        let emailsList = emailCtrl.prepareEmailForTrigger7(productsList, perPartnerShowInList, 1);
+
+        emailCtrl.callSfSendMailAPI(sfConn, emailsList);
     }
 
     return;
