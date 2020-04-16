@@ -99,7 +99,7 @@ async function sendActiveOffersToCustomerApi(req, res, next) {
 
 async function acceptedOfferCanceledApi(req, res, next) {
     let sfConn = req.needs.sfConn,
-        oppId = req.query.oppId;
+        oppId = req.body.oppId;
 
     let resBody;
     
