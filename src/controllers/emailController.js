@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const logger = require('./customeLogger');
 const fs = require('fs');
+const util = require('util');
 const path = require("path");
 
 
@@ -85,15 +86,52 @@ function prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInList) 
     let productsPerOpp = _.groupBy(productsList, 'Supplier_Partner_Opportunity__r.OpportunityId__c');
 
     let subject = "Trigger ActiveOffers";
+        
+    let mainHtmlBodyAddr = staticResource + "\\offersOverview.html";
+    let offerTemplateHtmlAddr = staticResource + "\\offerTemplate.html";
 
-    for (let [key, value] of Object.entries(productsPerOpp)) {
-        let toAddr = _.get(value, ['0', 'Supplier_Partner_Opportunity__r','OpportunityId__r','PrimaryContact__r','Email']);
-        let whatId = key;
-        let body = JSON.stringify(value, null, 2);
+    let mainHtmlTemplate = fs.readFileSync(mainHtmlBodyAddr, 'utf8');
+    let offerHtmlTemplate = fs.readFileSync(offerTemplateHtmlAddr, 'utf8');
 
-        emailsList.push(createMailObject(toAddr, subject, body, whatId));
-      }
-      return emailsList;
+
+    for (let [oppId, productList] of Object.entries(productsPerOpp)) {
+        let mainHtml = mainHtmlTemplate;
+
+        let primaryContact = _.get(productList, ['0','Supplier_Partner_Opportunity__r','OpportunityId__r', 'PrimaryContact__r']);
+        let contactEmail = (primaryContact) ? _.get(primaryContact, 'Email') : null;
+        
+        let whatId = _.get(productList, ['0', 'Supplier_Partner_Opportunity__r', 'OpportunityId__c'], null);
+        let customerName = _.get(primaryContact, 'FirstName') || _.get(primaryContact, 'LastName') || '';
+
+        mainHtml = mainHtml.replace(/{{First_Name}}/gi, customerName);
+
+        let allOfferHtml = '';
+        productList.forEach(pro => {
+            let offerHtml = offerHtmlTemplate;
+            
+            let partner = _.get(pro, 'Supplier_Partner_Opportunity__r.SupplierAccountId__r');
+            
+            let partnerName = _.get(partner, 'Display_Name__c') || _.get(partner, 'Name') || '';
+            let loanAmount = _.get(pro, 'Amount__c', '---') || '---';
+            let loanPeriod = _.get(pro, 'Loan_Period__c', '---') || '---';
+            let totalMonthlyPayment = _.get(pro, 'details.Total_monthly_payment__c', '---') || '---';            
+            
+            offerHtml = offerHtml.replace(/{{partner_name}}/gi, partnerName);
+            offerHtml = offerHtml.replace(/{{Loan_amount}}/gi, loanAmount);
+            offerHtml = offerHtml.replace(/{{Loan_period}}/gi, loanPeriod);
+            offerHtml = offerHtml.replace(/{{Totalt_kostnad_per_månad}}/gi, totalMonthlyPayment);
+
+            allOfferHtml += offerHtml;
+        });
+
+        mainHtml = mainHtml.replace(/{{offers_list}}/gi, allOfferHtml);
+        
+        if (contactEmail) {
+            emailsList.push(createMailObject(contactEmail, subject, mainHtml, whatId));
+        }
+    }
+    
+    return emailsList;
 }
 
 function prepareOverviewEmailForPartners(partners, productListPerPartners, spoListPerPartners) {
