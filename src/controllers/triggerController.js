@@ -7,7 +7,7 @@ const emailCtrl = require('./emailController');
 const feedCtrl = require('./feedItemController');
 const jsforce = require('jsforce');
 const _ = require('lodash');
-const jsforce = require('jsforce');
+// const jsforce = require('jsforce');
 const myToolkit = require('./myToolkit');
 
 
@@ -88,10 +88,7 @@ async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
     // Section: Send Mail if any product exist
     if (productsList.length > 0) {
         let perPartnerShowInList = generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName);
-        let emailsList = emailCtrl.prepareEmailForTrigger7(productsList, perPartnerShowInList, 1);
-        
-        emailCtrl.callSfSendMailAPI(sfConn, emailsList);
-        
+        emailCtrl.prepareEmailForTrigger7(sfConn, productsList, perPartnerShowInList, 1);
     }
 
     return;
