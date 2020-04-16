@@ -19,7 +19,16 @@ function prepareEmailForTrigger7(productList, perPartnerShowInList) {
     try {
         emailTemplate = fs.readFileSync(htmlBodyAddr, 'utf8');
     } catch (e) {
-
+        logger.error('readFileSync Error', {metadata: {
+            addrs: [
+                mainHtmlBodyAddr,
+                offerHtmlTemplate
+            ],
+            input: {
+                productList: productsList,
+                perPartnerShowInList: perPartnerShowInList
+            }
+        }});
         throw e;
     }
 
