@@ -45,7 +45,7 @@ async function acceptedOfferCanceledController(sfConn, oppId) {
     // Section: Send Mail if any product exist
     if (productsList.length > 0) {
         let perPartnerShowInList = generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName);
-        let emailsList = emailCtrl.prepareEmailForProducts(productsList, perPartnerShowInList, 1);
+        let emailsList = emailCtrl.prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInList);
         
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
         

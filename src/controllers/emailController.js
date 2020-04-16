@@ -189,65 +189,74 @@ function prepareOverviewEmailForPartners(partners, productListPerPartners, spoLi
 
 
 function prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInList) {
-    let emailList = [];
+    let emailsList = [];
 
-    // Note: Example for Customer Email. 
-    let emailTo = _.get(productsList, ['0', 'Supplier_Partner_Opportunity__r', 'OpportunityId__r', 'PrimaryContact__r','Email']);
-    let emailSubject = 'You Still Have Some Offers for Your Application';
-    let emailWhatId = _.get(productsList, ['0', 'Supplier_Partner_Opportunity__r', 'OpportunityId__c']);
+    let productsPerOpp = _.groupBy(productsList, 'Supplier_Partner_Opportunity__r.OpportunityId__c');
 
-    let emailBody = '<html><Body>' +
-                            '<div>Hi, Active offers for your application are listed below.</div>' +
-                            '<table border="1">'+
-                                '<tr>' +
-                                    '<td> Partner </td>' +
-                                    '<td> Title </td>' +
-                                    '<td> Value </td>' +
-                                '</tr>';
+    let subject = "Trigger ActiveOffers";
+        
+    let mainHtmlBodyAddr = staticResource + "\\offersOverview.html";
+    let offerTemplateHtmlAddr = staticResource + "\\offerTemplate.html";
 
-    productsList.forEach(product => {
-        try {
-            let partnerId = _.get(product, 'Supplier_Partner_Opportunity__r.SupplierAccountId__r.Organization_Number__c', '');
-            let partnerName = _.get(product, 'Supplier_Partner_Opportunity__r.SupplierAccountId__r.Name', '');
-            let showInListOfPartner = perPartnerShowInList[partnerId] || [];
+    let mainHtmlTemplate,
+        offerHtmlTemplate;
+    try {
+        mainHtmlTemplate = fs.readFileSync(mainHtmlBodyAddr, 'utf8');
+        offerHtmlTemplate = fs.readFileSync(offerTemplateHtmlAddr, 'utf8');
+    } catch (e) {
+        logger.error('readFileSync Error', {metadata: {
+            addrs: [
+                mainHtmlBodyAddr,
+                offerHtmlTemplate
+            ],
+            input: {
+                productList: productsList,
+                perPartnerShowInList: perPartnerShowInList
+            }
+        }});
+        
+        throw e;
+    }
+
+
+    for (let [oppId, productList] of Object.entries(productsPerOpp)) {
+        let mainHtml = mainHtmlTemplate;
+
+        let primaryContact = _.get(productList, ['0','Supplier_Partner_Opportunity__r','OpportunityId__r', 'PrimaryContact__r']);
+        let contactEmail = (primaryContact) ? _.get(primaryContact, 'Email') : null;
+        
+        let whatId = _.get(productList, ['0', 'Supplier_Partner_Opportunity__r', 'OpportunityId__c'], null);
+        let customerName = _.get(primaryContact, 'FirstName') || _.get(primaryContact, 'LastName') || '';
+
+        mainHtml = mainHtml.replace(/{{First_Name}}/gi, customerName);
+
+        let allOfferHtml = '';
+        productList.forEach(pro => {
+            let offerHtml = offerHtmlTemplate;
             
-            emailBody +='<tr>' +
-                            '<td> ' + partnerName + '</td>' +
-                            '<td> ' + 'Amount' + '</td>' +
-                            '<td> ' + _.get(product, 'Amount__c', '-') + '</td>' +
-                        '</tr>' +
-                        '<tr>' +
-                            '<td> ' + partnerName + '</td>' +
-                            '<td> ' + 'Period' + '</td>' +
-                            '<td> ' + _.get(product, 'Loan_Period__c', '-') + '</td>' +
-                        '</tr>';
+            let partner = _.get(pro, 'Supplier_Partner_Opportunity__r.SupplierAccountId__r');
+            
+            let partnerName = _.get(partner, 'Display_Name__c') || _.get(partner, 'Name') || '';
+            let loanAmount = _.get(pro, 'Amount__c', '---') || '---';
+            let loanPeriod = _.get(pro, 'Loan_Period__c', '---') || '---';
+            let totalMonthlyPayment = _.get(pro, 'details.Total_monthly_payment__c', '---') || '---';            
+            
+            offerHtml = offerHtml.replace(/{{partner_name}}/gi, partnerName);
+            offerHtml = offerHtml.replace(/{{Loan_amount}}/gi, loanAmount);
+            offerHtml = offerHtml.replace(/{{Loan_period}}/gi, loanPeriod);
+            offerHtml = offerHtml.replace(/{{Totalt_kostnad_per_månad}}/gi, totalMonthlyPayment);
 
-            showInListOfPartner.forEach(item => {
-                let itemName = item.Name;
-                let itemApiName = _.get(item, 'API_Name__c', '') + '__c';
+            allOfferHtml += offerHtml;
+        });
 
-                if (_.get(product, ['details', itemApiName])) {
-                    emailBody += '<tr>' +
-                                    '<td> ' + partnerName + '</td>' +
-                                    '<td> ' + itemName + '</td>' +
-                                    '<td> ' + _.get(product, ['details', itemApiName]) + '</td>' +
-                                '</tr>';
-                }
-            });
-        } catch(e) {
-            logger.error('prepareEmailForProducts Error', {metadata: {
-                product: product,
-                error: e
-            }});
+        mainHtml = mainHtml.replace(/{{offers_list}}/gi, allOfferHtml);
+        
+        if (contactEmail) {
+            emailsList.push(createMailObject(contactEmail, subject, mainHtml, whatId));
         }
-    });
-
-    emailBody += '</table>'+
-                '</body></html>';
-
-    emailList.push(createMailObject(emailTo, emailSubject, emailBody, emailWhatId));
+    }
     
-    return emailList;
+    return emailsList;
 }
 
 
