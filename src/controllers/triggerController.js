@@ -125,6 +125,9 @@ async function sendOverviewToPartners_EmailTriggerController(sfConn) {
     
             let partialProductList = await sfConn.sobject('Product__c')
                                                     .select('*' + 
+                                                            ', Supplier_Partner_Opportunity__r.OpportunityId__r.Opportunity_Number__c' +
+                                                            ', Supplier_Partner_Opportunity__r.OpportunityId__r.Account.Organization_Number__c' +
+                                                            ', Supplier_Partner_Opportunity__r.OpportunityId__r.Account.Name' +
                                                             ', Supplier_Partner_Opportunity__r.SupplierAccountId__c' +
                                                             ', Supplier_Partner_Opportunity__r.SupplierAccountId__r.Organization_Number__c' +
                                                             ', Supplier_Partner_Opportunity__r.SupplierAccountId__r.Name' + 
@@ -138,6 +141,7 @@ async function sendOverviewToPartners_EmailTriggerController(sfConn) {
             let partialSpoList = await sfConn.sobject('Supplier_Partner_Opportunity__c')
                                                 .select('*' + 
                                                         ', OpportunityId__r.Amount' +
+                                                        ', OpportunityId__r.Opportunity_Number__c' +
                                                         ', SupplierAccountId__r.Organization_Number__c' +
                                                         ', SupplierAccountId__r.Email__c'
                                                         )
