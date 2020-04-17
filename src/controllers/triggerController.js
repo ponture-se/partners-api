@@ -88,7 +88,7 @@ async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
     // Section: Send Mail if any product exist
     if (productsList.length > 0) {
         let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
-        let emailsList = emailCtrl.prepareEmailForTrigger7(productsList, perPartnerShowInEmail, 1);
+        let emailsList = emailCtrl.prepareEmailForOfferAcceptance(productsList, perPartnerShowInEmail);
 
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
     }
@@ -204,12 +204,33 @@ async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
         }
     });
 
-    // Section: prepare emails
-    let emailList = emailCtrl.prepareEmailForTrigger2(desiredProducts);
-
-    if (emailList.length > 0) {
-        await emailCtrl.callSfSendMailAPI(sfConn, emailList);
+    // Get Desired Partner Ids to get Product Details
+    let desiredPartnerId = _.compact(_.map(desiredProducts, o => {
+        return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
+    }));
+    let partnerWhere = {
+        id: {$in: desiredPartnerId}
     }
+    let productWhereForDetails = {
+        id: {$in: desiredProductIds}
+    }
+
+    let productsObject = await productCtrl.getProdcutsWithDetailsWhere_specificPartner(sfConn, partnerWhere, productWhereForDetails);
+    let productsList = productsObject.productsList;
+    let partnerPMasterMap = productsObject.partnerPMasterMap;
+    let trBoxPerCobjName = productsObject.trBoxPerCobjName;
+
+
+
+    // Section: Send Mail if any product exist
+    if (productsList.length > 0) {
+        let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        let emailsList = emailCtrl.prepareEmailForOfferAcceptance(productsList, perPartnerShowInEmail);
+
+        emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+    }
+
+    return;
 
 }
 
