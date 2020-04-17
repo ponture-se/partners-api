@@ -306,7 +306,7 @@ function generateDynamicContent(product, showInEmailForPartner) {
 
         if (_.get(product, ['details', itemApiName])) {
             partnerDynamicFields += '<p style="mso-line-height-rule:exactly; line-height:175%">' + itemLabel + 
-                                    ': <strong>' + _.get(product, ['details', itemApiName]) + ' ' +
+                                    ': <strong>' + _.get(product, ['details', itemApiName], '---') + ' ' +
                                     itemUnit + '</strong></p>';
         }
     });
