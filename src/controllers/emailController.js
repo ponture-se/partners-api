@@ -255,16 +255,22 @@ function prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInE
             let offerHtml = offerHtmlTemplate;
             
             let partner = _.get(pro, 'Supplier_Partner_Opportunity__r.SupplierAccountId__r');
+
+            let partnerId = _.get(partner, 'Organization_Number__c');
+            let showInEmailForPartner = (partnerId) ? _.get(perPartnerShowInEmail, partnerId, []) : [];
+
+            let partnerDynamicFields = generateDynamicContent(pro, showInEmailForPartner);
             
             let partnerName = _.get(partner, 'Display_Name__c') || _.get(partner, 'Name') || '';
             let loanAmount = _.get(pro, 'Amount__c', '---') || '---';
             let loanPeriod = _.get(pro, 'Loan_Period__c', '---') || '---';
-            let totalMonthlyPayment = _.get(pro, 'details.Total_monthly_payment__c', '---') || '---';            
+            // let totalMonthlyPayment = _.get(pro, 'details.Total_monthly_payment__c', '---') || '---';            
             
             offerHtml = offerHtml.replace(/{{partner_name}}/gi, partnerName);
             offerHtml = offerHtml.replace(/{{Loan_amount}}/gi, loanAmount);
             offerHtml = offerHtml.replace(/{{Loan_period}}/gi, loanPeriod);
-            offerHtml = offerHtml.replace(/{{Totalt_kostnad_per_månad}}/gi, totalMonthlyPayment);
+            // offerHtml = offerHtml.replace(/{{Totalt_kostnad_per_månad}}/gi, totalMonthlyPayment);
+            offerHtml = offerHtml.replace(/{{Dynamic_fields}}/gi, partnerDynamicFields);
 
             allOfferHtml += offerHtml;
         });
