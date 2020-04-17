@@ -199,7 +199,7 @@ async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
     let desiredProductIds = _.map(filteredFeeds, 'ParentId');
 
     let desiredProducts = _.filter(productList, o => {
-        if (desiredProductIds.includes(_.get(o, 'Id'), '_no_id_')) {
+        if (desiredProductIds.includes(_.get(o, 'Id', '_no_id_'))) {
             return true;
         }
     });
