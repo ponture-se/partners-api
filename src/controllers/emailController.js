@@ -8,8 +8,8 @@ const path = require("path");
 const staticResource = path.resolve(__dirname, '../staticResources');
 
 // Trigger 7
-function prepareEmailForTrigger7(productList, perPartnerShowInList) {
-    // FIXME: Mock Mail + Use perPartnerShowInList
+function prepareEmailForTrigger7(productList, perPartnerShowInEmail) {
+    // FIXME: Mock Mail + Use perPartnerShowInEmail
     let emailsList = [];
     let subject = 'Partner Info By Trigger 7';
     
@@ -26,7 +26,7 @@ function prepareEmailForTrigger7(productList, perPartnerShowInList) {
             ],
             input: {
                 productList: productsList,
-                perPartnerShowInList: perPartnerShowInList
+                perPartnerShowInEmail: perPartnerShowInEmail
             }
         }});
         throw e;
@@ -35,6 +35,11 @@ function prepareEmailForTrigger7(productList, perPartnerShowInList) {
     productList.forEach(pro => {
         let primaryContact = _.get(pro, 'Supplier_Partner_Opportunity__r.OpportunityId__r.PrimaryContact__r');
         let partner = _.get(pro, 'Supplier_Partner_Opportunity__r.SupplierAccountId__r');
+
+        let partnerId = _.get(partner, 'Organization_Number__c');
+        let showInEmailForPartner = (partnerId) ? _.get(perPartnerShowInEmail, partnerId, []) : [];
+
+        let partnerDynamicFields = generateDynamicContent(pro, showInEmailForPartner);
 
         let contactEmail = (primaryContact) ? _.get(primaryContact, 'Email') : null;
         let whatId = _.get(pro, 'Supplier_Partner_Opportunity__r.OpportunityId__c', null);
@@ -46,7 +51,7 @@ function prepareEmailForTrigger7(productList, perPartnerShowInList) {
         let partnerPhone = _.get(partner, 'Support_Phone__c', '---') || '---';
         let loanAmount = _.get(pro, 'Amount__c', '---') || '---';
         let loanPeriod = _.get(pro, 'Loan_Period__c', '---') || '---';
-        let totalMonthlyPayment = _.get(pro, 'details.Total_monthly_payment__c', '---') || '---';
+        // let totalMonthlyPayment = _.get(pro, 'details.Total_monthly_payment__c', '---') || '---';
 
 
         html = html.replace(/{{First_Name}}/gi, customerName);
@@ -54,7 +59,7 @@ function prepareEmailForTrigger7(productList, perPartnerShowInList) {
         html = html.replace(/{{partner_telefon}}/gi, partnerPhone);
         html = html.replace(/{{loan_amount}}/gi, loanAmount);
         html = html.replace(/{{loan_period}}/gi, loanPeriod);
-        html = html.replace(/{{totalt_kostnad_per_månad}}/gi, totalMonthlyPayment);
+        html = html.replace(/{{Dynamic_fields}}/gi, partnerDynamicFields);
 
         if (contactEmail) {
             emailsList.push(createMailObject(contactEmail, subject, html, whatId));
@@ -88,7 +93,7 @@ function prepareEmailForTrigger2(productList) {
 }
 
 
-function prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInList) {
+function prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail) {
     // FIXME: Mock Mail
     let emailsList = [];
 
@@ -112,7 +117,7 @@ function prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInList) 
             ],
             input: {
                 productList: productsList,
-                perPartnerShowInList: perPartnerShowInList
+                perPartnerShowInEmail: perPartnerShowInEmail
             }
         }});
         
@@ -197,7 +202,7 @@ function prepareOverviewEmailForPartners(partners, productListPerPartners, spoLi
 }
 
 
-function prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInList) {
+function prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInEmail) {
     let emailsList = [];
 
     let productsPerOpp = _.groupBy(productsList, 'Supplier_Partner_Opportunity__r.OpportunityId__c');
@@ -220,7 +225,7 @@ function prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInL
             ],
             input: {
                 productList: productsList,
-                perPartnerShowInList: perPartnerShowInList
+                perPartnerShowInEmail: perPartnerShowInEmail
             }
         }});
         
@@ -277,6 +282,24 @@ function createMailObject(to, subject, body, whatId = null) {
         body: body,
         whatId:whatId
     }
+}
+
+function generateDynamicContent(product, showInEmailForPartner) {
+    partnerDynamicFields = "";
+
+    showInEmailForPartner.forEach(item => {
+        let itemLabel = item.Translated_Label__c;
+        let itemUnit = item.Customer_Unit__c;
+        let itemApiName = _.get(item, 'API_Name__c', '') + '__c';
+
+        if (_.get(product, ['details', itemApiName])) {
+            partnerDynamicFields += '<p style="mso-line-height-rule:exactly; line-height:175%">' + itemLabel + 
+                                    ': <strong>' + _.get(product, ['details', itemApiName]) + ' ' +
+                                    itemUnit + '</strong></p>';
+        }
+    });
+
+    return partnerDynamicFields;
 }
 
 
