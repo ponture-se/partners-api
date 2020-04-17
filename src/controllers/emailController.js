@@ -177,27 +177,85 @@ function prepareOverviewEmailForPartners(partners, productListPerPartners, spoLi
 
     let subject = 'Check The Overview of Your Ponture Account'
 
+    
+    let htmlTemplateAddr = staticResource + "\\partnerOverview.html";
+
+    let mainHtmlTemplate;
+    try {
+        mainHtmlTemplate = fs.readFileSync(htmlTemplateAddr, 'utf8');
+    } catch (e) {
+        logger.error('readFileSync Error', {metadata: {
+            error : e,
+            addrs: htmlTemplateAddr,
+            input: {
+                partners: partners,
+                productListPerPartners: productListPerPartners,
+                spoListPerPartners: spoListPerPartners
+            }
+        }});
+        
+        throw e;
+    }
+
     for (let [partnerId, partnerList] of Object.entries(partners)) {
         let partner = partnerList[0];
-        let partnerEmail = _.get(partner, 'Email__c');
-        let productOfPartner = _.get(productListPerPartners, partnerId);
-        let spoOfPartner = _.get(spoListPerPartners, partnerId);
-
         let whatId = partnerId;
+        
+        let partnerEmail = _.get(partner, 'Email__c');
+        if (!partnerEmail) continue;
 
-        let body = '<div>' + partner.Name + ': </div>' +
-                    '<hr>'+
-                    '<br/>' +
-                    '<br/>' +
-                    '<div>Your Accepted Products</div>' +
-                    '<br/>' +
-                    '<div>' + JSON.stringify(productOfPartner, null, 2) + ': </div>' +
-                    '<br/>' +
-                    '<br/>' +
-                    '<hr>'+
-                    '<div>Your SPO</div>' +
-                    '<br/>' +
-                    '<div>' + JSON.stringify(spoOfPartner, null, 2) + ': </div>';
+        let productOfPartner = _.get(productListPerPartners, partnerId, []);
+        let spoOfPartner = _.get(spoListPerPartners, partnerId, []);
+        
+        let spoOfPartnerPerStage = _.groupBy(spoOfPartner, 'Stage__c');
+        let newSpoOfPartner = _.get(spoOfPartnerPerStage, 'New', []);
+        let openedSpoOfPartner = _.get(spoOfPartnerPerStage, 'Opened', []);
+
+
+        let body = mainHtmlTemplate;
+
+        let offerListHtml = '',
+            newSpoListHtml = '',
+            openedSpoListHtml = '';
+
+
+        for (let pro of productOfPartner) {
+            let offerNumber = _.get(pro, 'Offer_Number__c', '___'),
+                leadName = _.get(pro, 'Supplier_Partner_Opportunity__r.OpportunityId__r.Account.Name', '___')
+                leadOrgNum = _.get(pro, 'Supplier_Partner_Opportunity__r.OpportunityId__r.Account.Organization_Number__c', '___');
+
+            offerListHtml += '<tr>' +
+                                '<td align="left">' + offerNumber + '</td>' +
+                                '<td align="left">' + leadName + '</td>' +
+                                '<td align="left">' + leadOrgNum + '</td>' +
+                            '</tr>';
+        }
+
+        for (let newSpo of newSpoOfPartner) {
+            let leadNumber = _.get(newSpo, 'OpportunityId__r.Opportunity_Number__c', '___'),
+                Amount = _.get(newSpo, 'OpportunityId__r.Amount', '___')                
+
+                newSpoListHtml += '<tr>' +
+                                '<td align="left">' + leadNumber + '</td>' +
+                                '<td align="left">' + Amount + ' kr </td>' +
+                            '</tr>';
+        }
+
+        for (let openedSpo of openedSpoOfPartner) {
+            let leadNumber = _.get(openedSpo, 'OpportunityId__r.Opportunity_Number__c', '___'),
+                Amount = _.get(openedSpo, 'OpportunityId__r.Amount', '___')                
+
+                openedSpoListHtml += '<tr>' +
+                                '<td align="left">' + leadNumber + '</td>' +
+                                '<td align="left">' + Amount + ' kr</td>' +
+                            '</tr>';
+        }
+
+        body = body.replace(/{{Offers_List}}/gi, offerListHtml);
+        body = body.replace(/{{New_Leads_List}}/gi, newSpoListHtml);
+        body = body.replace(/{{Open_Leads_List}}/gi, openedSpoListHtml);
+        body = body.replace(/{{Total_No_New_Leads}}/gi, newSpoOfPartner.length || 0);
+        body = body.replace(/{{Total_No_Open_Leads}}/gi, openedSpoOfPartner.length || 0);
 
         if (partnerEmail) {
             emailsList.push(createMailObject(partnerEmail, subject, body, whatId));
