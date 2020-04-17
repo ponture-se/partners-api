@@ -160,8 +160,6 @@ async function sendOverviewToPartners_EmailTriggerController(sfConn) {
     
 }
 
-
-
 async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
     // Section: get desired offers
     let whereClause = {
@@ -214,6 +212,7 @@ async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
     }
 
 }
+
 async function sendActiveOffersToCustomerController_case3(sfConn) {
     // Note: Trigger 3 - send an email to the customer if customer has applied between 00:00 to 12:00 PM same day and has at least one active offers and no accepted offer
  
