@@ -44,8 +44,8 @@ async function acceptedOfferCanceledController(sfConn, oppId) {
     
     // Section: Send Mail if any product exist
     if (productsList.length > 0) {
-        let perPartnerShowInList = generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName);
-        let emailsList = emailCtrl.prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInList);
+        let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        let emailsList = emailCtrl.prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInEmail);
         
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
         
@@ -87,8 +87,8 @@ async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
     
     // Section: Send Mail if any product exist
     if (productsList.length > 0) {
-        let perPartnerShowInList = generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName);
-        let emailsList = emailCtrl.prepareEmailForTrigger7(productsList, perPartnerShowInList, 1);
+        let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        let emailsList = emailCtrl.prepareEmailForTrigger7(productsList, perPartnerShowInEmail, 1);
 
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
     }
@@ -292,8 +292,8 @@ async function sendActiveOffersToCustomerController_case3(sfConn) {
 
     // Section: email Section
     if (productsList.length > 0) {
-        let perPartnerShowInList = generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName);
-        let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInList);
+        let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail);
         
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
         
@@ -381,8 +381,8 @@ async function sendActiveOffersToCustomerController_case4(sfConn) {
 
     // Section: email Section
     if (productsList.length > 0) {
-        let perPartnerShowInList = generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName);
-        let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInList);
+        let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail);
         
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
         
@@ -482,8 +482,8 @@ async function sendActiveOffersToCustomerController_case5(sfConn) {
 
     // Section: email Section
     if (productsList.length > 0) {
-        let perPartnerShowInList = generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName);
-        let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInList);
+        let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail);
         
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
         
@@ -582,8 +582,8 @@ async function sendActiveOffersToCustomerController_case6(sfConn) {
 
     // Section: email Section
     if (productsList.length > 0) {
-        let perPartnerShowInList = generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName);
-        let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInList);
+        let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail);
         
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
         
@@ -591,7 +591,7 @@ async function sendActiveOffersToCustomerController_case6(sfConn) {
 
 }
 
-function generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName) {
+function generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName) {
     let result = {};
 
     for (let partnerId in partnerPMasterMap) {
@@ -601,14 +601,14 @@ function generatePerPartnerShowInList(partnerPMasterMap, trBoxPerCobjName) {
         if (trOfPartner.success) {
             // Note: Now, just consider Loan Type for Products
             let productTypesOfPartner = _.filter(trOfPartner.result, o => {
-                return o.Show_in_List__c;
+                return o.Show_In_Email__c;
             });
 
             // let productTypesOfPartner = _.groupBy(_.filter(trOfPartner.result, o => {
             //     return o.Show_in_List__c;
             // }), 'Product_Type__c');
 
-            result[partnerId] = productTypesOfPartner;
+            result[partnerId] = _.orderBy(productTypesOfPartner, ['index__c'], ['acs']);
         }
     }
 
