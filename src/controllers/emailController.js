@@ -8,7 +8,7 @@ const path = require("path");
 const staticResource = path.resolve(__dirname, '../staticResources');
 
 // Trigger 7
-function prepareEmailForTrigger7(productList, perPartnerShowInEmail) {
+function prepareEmailForOfferAcceptance(productList, perPartnerShowInEmail) {
     // FIXME: Mock Mail + Use perPartnerShowInEmail
     let emailsList = [];
     let subject = 'Partner Info By Trigger 7';
@@ -335,7 +335,7 @@ async function callSfSendMailAPI(sfConn, emailsList) {
 
 module.exports = {
     callSfSendMailAPI,
-    prepareEmailForTrigger7,
+    prepareEmailForOfferAcceptance,
     prepareEmailForTrigger2,
     prepareEmailForTriggerActiveOffers,
     prepareOverviewEmailForPartners,
