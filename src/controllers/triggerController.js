@@ -164,7 +164,8 @@ async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
     // Section: get desired offers
     let whereClause = {
         stage__c: "offer accepted",
-        lastModifiedDate: jsforce.Date.YESTERDAY
+        // lastModifiedDate: jsforce.Date.YESTERDAY
+        lastModifiedDate: jsforce.Date.LAST_N_DAYS(1)
     }
     let productList = await sfConn.sobject('Product__c')
                             .select('*' +
