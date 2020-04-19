@@ -50,10 +50,14 @@ async function getContentVersionWithCustomFileId(fileId, sfConn = undefined){
         let where = {File_ID__c : fileId};
 
         let cvItem = await queryHelper.getSingleQueryResult(sfConn, "ContentVersion", where);
+        let fileTitle = cvItem.Title;
+        if (cvItem && cvItem.Title && cvItem.FileExtension) {
+            fileTitle = (cvItem.Title.endsWith('.' + cvItem.FileExtension)) ? cvItem.Title : cvItem.Title + '.' + cvItem.FileExtension;
+        }
         let cvsInfo = {
                             cdId: cvItem.ContentDocumentId,
                             id : cvItem.Id,
-                            title : cvItem.Title,
+                            title : fileTitle,
                             fileExtension : cvItem.FileExtension,
                             content: cvItem.VersionData
                         };
