@@ -1,4 +1,6 @@
 const axios = require("axios");
+const queryString = require("query-string");
+const _ = require('lodash');
 
 exports.getPartnerProducts = function(req, res, next) {
   var accessToken = req.access_token;
@@ -373,7 +375,8 @@ exports.cancelOffer = function(req, res, next) {
     url: "/services/apexrest/cancelOffer",
     baseURL: apiRoot,
     method: "put",
-    params: req.query,
+    // params: req.query,
+    data: req.body,
     headers: {
       Authorization: "Bearer " + accessToken
     }
@@ -451,3 +454,23 @@ exports.acceptOffer = function(req, res, next) {
       res.status(400).send(error.config);
     });
 };
+
+async function fundAppController (sfConn, offerId, partnerId, loanAmount, loanPeriod) {
+  
+  let params = {
+    offerId: offerId,
+    partnerId: partnerId,
+    loanAmount: loanAmount,
+    loanPeriod: loanPeriod
+  }
+
+  params = _.pickBy(params, _.identity);
+
+  let qs = "?" + queryString.stringify(params);
+  
+	// Error handeled in parent
+	let result = await sfConn.apex.put('/fundApp' + qs);
+
+	return result;
+}
+exports.fundAppController = fundAppController;
