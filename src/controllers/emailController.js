@@ -3,6 +3,7 @@ const logger = require('./customeLogger');
 const fs = require('fs');
 const util = require('util');
 const path = require("path");
+const {salesforceException} = require('./customeException');
 
 
 const staticResource = path.resolve(__dirname, '../staticResources');
@@ -386,6 +387,8 @@ async function callSfSendMailAPI(sfConn, emailsList) {
             err: err,
             reqBody: reqBody
         }});
+
+        throw new salesforceException('sendEmails API Raised Error', err, 500);
     }
 
 

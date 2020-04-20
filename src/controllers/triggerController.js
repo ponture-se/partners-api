@@ -54,12 +54,13 @@ async function acceptedOfferCanceledController(sfConn, oppId) {
 
     
     // Section: Send Mail if any product exist
-    // todo: consider response
     if (productsList.length > 0) {
         let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInEmail);
         
-        emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+        let sendEmailResult = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+
+        return sendEmailResult;
         
     } else {
         return null;
@@ -108,12 +109,13 @@ async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
 
     
     // Section: Send Mail if any product exist
-    // todo: consider response
     if (productsList.length > 0) {
         let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForOfferAcceptance(productsList, perPartnerShowInEmail);
 
-        emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+        let sendEmailResult = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+
+        return sendEmailResult;
     } else {
         return null;
     }
@@ -182,9 +184,9 @@ async function sendOverviewToPartners_EmailTriggerController(sfConn) {
     
     let emailsList = emailCtrl.prepareOverviewEmailForPartners(partnersListById, productsListByPartnerId, spoListByPartnerId);
 
-    let result = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+    let sendEmailResult = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
 
-    // todo return
+    return sendEmailResult;
     
 }
 
@@ -264,12 +266,13 @@ async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
 
 
     // Section: Send Mail if any product exist
-    // todo: consider response
     if (productsList.length > 0) {
         let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForOfferAcceptance(productsList, perPartnerShowInEmail);
 
-        emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+        let sendEmailResult = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+
+        return sendEmailResult;
     } else {
         return null;
     }
@@ -372,8 +375,8 @@ async function sendActiveOffersToCustomerController_case3(sfConn) {
         let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail);
         
-        emailCtrl.callSfSendMailAPI(sfConn, emailsList);
-        
+        let sendEmailResult = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+        return sendEmailResult;
     } else {
         return null;
     }
@@ -475,8 +478,10 @@ async function sendActiveOffersToCustomerController_case4(sfConn) {
     if (productsList.length > 0) {
         let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail);
-        // todo: await
-        emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+        
+        let sendEmailResult = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+
+        return sendEmailResult;
         
     } else {
         return null;
@@ -592,8 +597,9 @@ async function sendActiveOffersToCustomerController_case5(sfConn) {
     if (productsList.length > 0) {
         let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail);
-        // todo: revise, await, return statement
-        emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+        let sendEmailResult = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+
+        return sendEmailResult;
         
     } else {
         return null;
@@ -708,8 +714,9 @@ async function sendActiveOffersToCustomerController_case6(sfConn) {
     if (productsList.length > 0) {
         let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail);
-        // todo: revise, awiat, return statement
-        emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+        
+        let sendEmailResult = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+        return sendEmailResult;
         
     } else {
         return null;
