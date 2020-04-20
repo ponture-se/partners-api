@@ -32,6 +32,7 @@ async function acceptedOfferCanceledController(sfConn, oppId) {
     let desiredPartnerId = _.compact(_.map(offersMainData, o => {
         return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
     }));
+    // todo: check desiredPartnerId list not to be empty
     let partnerWhere = {
         id: {$in: desiredPartnerId}
     }
@@ -43,6 +44,7 @@ async function acceptedOfferCanceledController(sfConn, oppId) {
 
     
     // Section: Send Mail if any product exist
+    // todo: consider response
     if (productsList.length > 0) {
         let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInEmail);
@@ -50,7 +52,8 @@ async function acceptedOfferCanceledController(sfConn, oppId) {
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
         
     }
-
+    
+    // todo
     return null;
     // return productList;
 }
@@ -75,6 +78,7 @@ async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
     let desiredPartnerId = _.compact(_.map(offersMainData, o => {
         return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
     }));
+    // todo: check desiredPartnerId list not to be empty
     let partnerWhere = {
         id: {$in: desiredPartnerId}
     }
@@ -86,13 +90,15 @@ async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
 
     
     // Section: Send Mail if any product exist
+    // todo: consider response
     if (productsList.length > 0) {
         let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForOfferAcceptance(productsList, perPartnerShowInEmail);
 
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
     }
-
+    
+    // todo
     return;
 }
 
@@ -150,7 +156,6 @@ async function sendOverviewToPartners_EmailTriggerController(sfConn) {
 
             spoList = spoList.concat(partialSpoList);
         }
-
     }
 
     // Section: prepare email
@@ -161,6 +166,8 @@ async function sendOverviewToPartners_EmailTriggerController(sfConn) {
     let emailsList = emailCtrl.prepareOverviewEmailForPartners(partnersListById, productsListByPartnerId, spoListByPartnerId);
 
     let result = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+
+    // todo return
     
 }
 
@@ -188,6 +195,7 @@ async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
     let initialProductIdList = _.map(productList, 'Id');
 
     if (initialProductIdList.length <= 0) {
+        // todo
         return;
     }
 
@@ -202,6 +210,7 @@ async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
     let feedItemsOfProducts = await feedCtrl.getFeedTrackItems(sfConn, feedWhereClause);
     let filteredFeeds = feedCtrl.filterSpecificTrackChangeFeeds(feedItemsOfProducts, 'stage__c', null, 'offer accepted');
     let desiredProductIds = _.map(filteredFeeds, 'ParentId');
+    // todo: if desiredProductIds is empty
 
     let desiredProducts = _.filter(productList, o => {
         if (desiredProductIds.includes(_.get(o, 'Id', '_no_id_'))) {
@@ -228,13 +237,15 @@ async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
 
 
     // Section: Send Mail if any product exist
+    // todo: consider response
     if (productsList.length > 0) {
         let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForOfferAcceptance(productsList, perPartnerShowInEmail);
 
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
     }
-
+    
+    // todo: retunrn
     return;
 
 }
@@ -265,6 +276,7 @@ async function sendActiveOffersToCustomerController_case3(sfConn) {
     
     
     let oppListId = _.map(oppList, 'Id');
+    // todo: check empty
     // Section: check feedItem
     let feedList = await feedCtrl.getFeedTrackItems(sfConn, {
                                     lastModifiedDate: jsforce.Date.TODAY,
@@ -286,6 +298,7 @@ async function sendActiveOffersToCustomerController_case3(sfConn) {
 
     // Section: get active offers of these opps
     // if (filteredOppListByHourId.length == 0) return;
+    // todo: revise return
     if (finalOppListId.length == 0) return;
     let productWhere = {
         "Supplier_Partner_Opportunity__r.OpportunityId__c" : {$in: finalOppListId},
@@ -300,6 +313,7 @@ async function sendActiveOffersToCustomerController_case3(sfConn) {
 
     let offersList = await productCtrl.getProductsWhere(sfConn, productWhere);
 
+    // todo: revise
     if (offersList.length == 0) return;
 
     // Section: get product details by id
@@ -307,6 +321,7 @@ async function sendActiveOffersToCustomerController_case3(sfConn) {
     let desiredPartnerId = _.compact(_.map(offersList, o => {
         return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
     }));
+    // todo: if list is empty
     let partnerWhere = {
         id: {$in: desiredPartnerId}
     }
@@ -341,6 +356,7 @@ async function sendActiveOffersToCustomerController_case4(sfConn) {
     // Section: get opportunity with stage: offer recieved in time
     let oppWhere = {
         stageName: 'Offer Received',
+        // todo: use last_n_days(1) instead
         lastModifiedDate: jsforce.Date.YESTERDAY
     }
     let hourCondition = {
@@ -354,6 +370,7 @@ async function sendActiveOffersToCustomerController_case4(sfConn) {
     
     
     let oppListId = _.map(oppList, 'Id');
+    // todo: check empty
     // Section: check feedItem
     let feedList = await feedCtrl.getFeedTrackItems(sfConn, {
                                     lastModifiedDate: jsforce.Date.YESTERDAY,
@@ -375,6 +392,7 @@ async function sendActiveOffersToCustomerController_case4(sfConn) {
 
     // Section: get active offers of these opps
     // if (filteredOppListByHourId.length == 0) return;
+    // todo: reviese
     if (finalOppListId.length == 0) return;
     let productWhere = {
         "Supplier_Partner_Opportunity__r.OpportunityId__c" : {$in: finalOppListId},
@@ -388,7 +406,7 @@ async function sendActiveOffersToCustomerController_case4(sfConn) {
     }
 
     let offersList = await productCtrl.getProductsWhere(sfConn, productWhere);
-
+    // todo: reviese
     if (offersList.length == 0) return;
 
     // Section: get product details by id
@@ -396,6 +414,7 @@ async function sendActiveOffersToCustomerController_case4(sfConn) {
     let desiredPartnerId = _.compact(_.map(offersList, o => {
         return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
     }));
+    // todo: check list
     let partnerWhere = {
         id: {$in: desiredPartnerId}
     }
@@ -409,10 +428,12 @@ async function sendActiveOffersToCustomerController_case4(sfConn) {
     if (productsList.length > 0) {
         let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail);
-        
+        // todo: await
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
         
     }
+
+    // todo: return statement
 
 }
 
@@ -435,6 +456,7 @@ async function sendActiveOffersToCustomerController_case5(sfConn) {
     }
     let hourCondition = {
         min: 0,
+        // todo: max == 24
         max: 12
     }
     let oppList = await sfConn.sobject('opportunity')
@@ -444,6 +466,7 @@ async function sendActiveOffersToCustomerController_case5(sfConn) {
     
     
     let oppListId = _.map(oppList, 'Id');
+    // todo: check list
     // Section: check feedItem
     let feedList = await feedCtrl.getFeedTrackItems(sfConn, {
                                     $and: [
@@ -476,6 +499,7 @@ async function sendActiveOffersToCustomerController_case5(sfConn) {
 
     // Section: get active offers of these opps
     // if (filteredOppListByHourId.length == 0) return;
+    // todo: revise
     if (finalOppListId.length == 0) return;
     let productWhere = {
         "Supplier_Partner_Opportunity__r.OpportunityId__c" : {$in: finalOppListId},
@@ -490,6 +514,7 @@ async function sendActiveOffersToCustomerController_case5(sfConn) {
 
     let offersList = await productCtrl.getProductsWhere(sfConn, productWhere);
 
+    // todo: revise
     if (offersList.length == 0) return;
 
     // Section: get product details by id
@@ -497,6 +522,7 @@ async function sendActiveOffersToCustomerController_case5(sfConn) {
     let desiredPartnerId = _.compact(_.map(offersList, o => {
         return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
     }));
+    // todo: check list empty
     let partnerWhere = {
         id: {$in: desiredPartnerId}
     }
@@ -510,7 +536,7 @@ async function sendActiveOffersToCustomerController_case5(sfConn) {
     if (productsList.length > 0) {
         let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail);
-        
+        // todo: revise, await, return statement
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
         
     }
@@ -535,6 +561,7 @@ async function sendActiveOffersToCustomerController_case6(sfConn) {
     }
     let hourCondition = {
         min: 0,
+        // todo: max => 24
         max: 12
     }
     let oppList = await sfConn.sobject('opportunity')
@@ -544,6 +571,7 @@ async function sendActiveOffersToCustomerController_case6(sfConn) {
     
     
     let oppListId = _.map(oppList, 'Id');
+    // todo: check list empty
     // Section: check feedItem
     let feedList = await feedCtrl.getFeedTrackItems(sfConn, {
                                     $and: [
@@ -576,6 +604,7 @@ async function sendActiveOffersToCustomerController_case6(sfConn) {
 
     // Section: get active offers of these opps
     // if (filteredOppListByHourId.length == 0) return;
+    // todo: revise
     if (finalOppListId.length == 0) return;
     let productWhere = {
         "Supplier_Partner_Opportunity__r.OpportunityId__c" : {$in: finalOppListId},
@@ -590,6 +619,7 @@ async function sendActiveOffersToCustomerController_case6(sfConn) {
 
     let offersList = await productCtrl.getProductsWhere(sfConn, productWhere);
 
+    // todo: revise
     if (offersList.length == 0) return;
 
     // Section: get product details by id
@@ -597,6 +627,7 @@ async function sendActiveOffersToCustomerController_case6(sfConn) {
     let desiredPartnerId = _.compact(_.map(offersList, o => {
         return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
     }));
+    // todo: check list
     let partnerWhere = {
         id: {$in: desiredPartnerId}
     }
@@ -610,7 +641,7 @@ async function sendActiveOffersToCustomerController_case6(sfConn) {
     if (productsList.length > 0) {
         let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail);
-        
+        // todo: revise, awiat, return statement
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
         
     }
