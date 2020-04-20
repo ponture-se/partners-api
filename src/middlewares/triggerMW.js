@@ -14,8 +14,13 @@ async function realTimeEmailAfterAcceptanceApi(req, res, next) {
         resBody = myResponse(true, null, 200, 'Emails are Sent to SF API.');
         res.status(200).send(resBody);
     } catch (e) {
-        resBody = myResponse(false, null, 500, 'Something Went Wrong.', e);
-        res.status(500).send(resBody);
+        if (e instanceof salesforceException) {
+            resBody = myResponse(false, null, e.statusCode ||500, e.message || 'Something Went Wrong.', e);
+            res.status(e.statusCode ||500).send(resBody);
+        } else {
+            resBody = myResponse(false, null, 500, 'Something Went Wrong.', e);
+            res.status(500).send(resBody);
+        }
     }
 
     return next();
@@ -30,8 +35,13 @@ async function sendOverviewToPartners_EmailTriggerApi(req, res, next) {
         resBody = myResponse(true, null, 200, 'Emails are Sent to SF API.');
         res.status(200).send(resBody);
     } catch (e) {
-        resBody = myResponse(false, null, 500, 'Something Went Wrong.', e);
-        res.status(500).send(resBody);
+        if (e instanceof salesforceException) {
+            resBody = myResponse(false, null, e.statusCode ||500, e.message || 'Something Went Wrong.', e);
+            res.status(e.statusCode ||500).send(resBody);
+        } else {
+            resBody = myResponse(false, null, 500, 'Something Went Wrong.', e);
+            res.status(500).send(resBody);
+        }
     }
 
     return next();
@@ -46,8 +56,13 @@ async function sendYesterdayAcceptedPartnerInfoApi(req, res, next) {
         resBody = myResponse(true, null, 200, 'Emails are Sent to SF API.');
         res.status(200).send(resBody);
     } catch (e) {
-        resBody = myResponse(false, null, 500, 'Something Went Wrong.', e);
-        res.status(500).send(resBody);
+        if (e instanceof salesforceException) {
+            resBody = myResponse(false, null, e.statusCode ||500, e.message || 'Something Went Wrong.', e);
+            res.status(e.statusCode ||500).send(resBody);
+        } else {
+            resBody = myResponse(false, null, 500, 'Something Went Wrong.', e);
+            res.status(500).send(resBody);
+        }
     }
 
     return next();
@@ -89,8 +104,13 @@ async function sendActiveOffersToCustomerApi(req, res, next) {
             res.status(400).send(resBody);
         }
     } catch (e) {
-        resBody = myResponse(false, null, 500, 'Something Went Wrong.', e);
-        res.status(500).send(resBody);
+        if (e instanceof salesforceException) {
+            resBody = myResponse(false, null, e.statusCode ||500, e.message || 'Something Went Wrong.', e);
+            res.status(e.statusCode ||500).send(resBody);
+        } else {
+            resBody = myResponse(false, null, 500, 'Something Went Wrong.', e);
+            res.status(500).send(resBody);
+        }
     }
 
     return next();
@@ -111,10 +131,13 @@ async function acceptedOfferCanceledApi(req, res, next) {
         res.status(200).send(resBody);
 
     } catch (e) {
-
-        resBody = myResponse(false, null, 500, 'Something Went Wrong', e);
-        res.status(500).send(resBody);
-
+        if (e instanceof salesforceException) {
+            resBody = myResponse(false, null, e.statusCode ||500, e.message || 'Something Went Wrong.', e);
+            res.status(e.statusCode ||500).send(resBody);
+        } else {
+            resBody = myResponse(false, null, 500, 'Something Went Wrong.', e);
+            res.status(500).send(resBody);
+        }
     }
 
     return next();
