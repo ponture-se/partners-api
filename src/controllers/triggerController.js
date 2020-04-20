@@ -214,8 +214,7 @@ async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
     let initialProductIdList = _.map(productList, 'Id');
 
     if (initialProductIdList.length <= 0) {
-        // todo
-        return;
+        return null;
     }
 
     // check to identify if yesterday change is on stage__c
@@ -305,7 +304,7 @@ async function sendActiveOffersToCustomerController_case3(sfConn) {
     
     
     let oppListId = _.map(oppList, 'Id');
-    // todo: check empty
+    if (!oppListId || oppListId.length == 0) return null;
     // Section: check feedItem
     let feedList = await feedCtrl.getFeedTrackItems(sfConn, {
                                     lastModifiedDate: jsforce.Date.TODAY,
@@ -327,8 +326,7 @@ async function sendActiveOffersToCustomerController_case3(sfConn) {
 
     // Section: get active offers of these opps
     // if (filteredOppListByHourId.length == 0) return;
-    // todo: revise return
-    if (finalOppListId.length == 0) return;
+    if (finalOppListId.length == 0) return null;
     let productWhere = {
         "Supplier_Partner_Opportunity__r.OpportunityId__c" : {$in: finalOppListId},
         // "Supplier_Partner_Opportunity__r.OpportunityId__c" : {
@@ -342,8 +340,7 @@ async function sendActiveOffersToCustomerController_case3(sfConn) {
 
     let offersList = await productCtrl.getProductsWhere(sfConn, productWhere);
 
-    // todo: revise
-    if (offersList.length == 0) return;
+    if (offersList.length == 0) return null;
 
     // Section: get product details by id
     // Get Desired Partner Ids to get Product Details
@@ -410,7 +407,7 @@ async function sendActiveOffersToCustomerController_case4(sfConn) {
     
     
     let oppListId = _.map(oppList, 'Id');
-    // todo: check empty
+    if (!oppListId || oppListId.length == 0) return null;
     // Section: check feedItem
     let feedList = await feedCtrl.getFeedTrackItems(sfConn, {
                                     lastModifiedDate: jsforce.Date.YESTERDAY,
@@ -432,8 +429,7 @@ async function sendActiveOffersToCustomerController_case4(sfConn) {
 
     // Section: get active offers of these opps
     // if (filteredOppListByHourId.length == 0) return;
-    // todo: reviese
-    if (finalOppListId.length == 0) return;
+    if (finalOppListId.length == 0) return null;
     let productWhere = {
         "Supplier_Partner_Opportunity__r.OpportunityId__c" : {$in: finalOppListId},
         // "Supplier_Partner_Opportunity__r.OpportunityId__c" : {
@@ -446,8 +442,7 @@ async function sendActiveOffersToCustomerController_case4(sfConn) {
     }
 
     let offersList = await productCtrl.getProductsWhere(sfConn, productWhere);
-    // todo: reviese
-    if (offersList.length == 0) return;
+    if (offersList.length == 0) return null;
 
     // Section: get product details by id
     // Get Desired Partner Ids to get Product Details
@@ -517,7 +512,7 @@ async function sendActiveOffersToCustomerController_case5(sfConn) {
     
     
     let oppListId = _.map(oppList, 'Id');
-    // todo: check list
+    if (!oppListId || oppListId.length == 0) return null;
     // Section: check feedItem
     let feedList = await feedCtrl.getFeedTrackItems(sfConn, {
                                     $and: [
@@ -550,8 +545,7 @@ async function sendActiveOffersToCustomerController_case5(sfConn) {
 
     // Section: get active offers of these opps
     // if (filteredOppListByHourId.length == 0) return;
-    // todo: revise
-    if (finalOppListId.length == 0) return;
+    if (finalOppListId.length == 0) return null;
     let productWhere = {
         "Supplier_Partner_Opportunity__r.OpportunityId__c" : {$in: finalOppListId},
         // "Supplier_Partner_Opportunity__r.OpportunityId__c" : {
@@ -565,8 +559,7 @@ async function sendActiveOffersToCustomerController_case5(sfConn) {
 
     let offersList = await productCtrl.getProductsWhere(sfConn, productWhere);
 
-    // todo: revise
-    if (offersList.length == 0) return;
+    if (offersList.length == 0) return null;
 
     // Section: get product details by id
     // Get Desired Partner Ids to get Product Details
@@ -634,7 +627,7 @@ async function sendActiveOffersToCustomerController_case6(sfConn) {
     
     
     let oppListId = _.map(oppList, 'Id');
-    // todo: check list empty
+    if (!oppListId || oppListId.length == 0) return null;
     // Section: check feedItem
     let feedList = await feedCtrl.getFeedTrackItems(sfConn, {
                                     $and: [
@@ -667,8 +660,7 @@ async function sendActiveOffersToCustomerController_case6(sfConn) {
 
     // Section: get active offers of these opps
     // if (filteredOppListByHourId.length == 0) return;
-    // todo: revise
-    if (finalOppListId.length == 0) return;
+    if (finalOppListId.length == 0) return null;
     let productWhere = {
         "Supplier_Partner_Opportunity__r.OpportunityId__c" : {$in: finalOppListId},
         // "Supplier_Partner_Opportunity__r.OpportunityId__c" : {
@@ -681,9 +673,7 @@ async function sendActiveOffersToCustomerController_case6(sfConn) {
     }
 
     let offersList = await productCtrl.getProductsWhere(sfConn, productWhere);
-
-    // todo: revise
-    if (offersList.length == 0) return;
+    if (offersList.length == 0) return null;
 
     // Section: get product details by id
     // Get Desired Partner Ids to get Product Details
