@@ -356,8 +356,7 @@ async function sendActiveOffersToCustomerController_case4(sfConn) {
     // Section: get opportunity with stage: offer recieved in time
     let oppWhere = {
         stageName: 'Offer Received',
-        // todo: use last_n_days(1) instead
-        lastModifiedDate: jsforce.Date.YESTERDAY
+        lastModifiedDate: jsforce.Date.LAST_N_DAYS(1)
     }
     let hourCondition = {
         min: 12,
