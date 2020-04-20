@@ -61,11 +61,9 @@ async function acceptedOfferCanceledController(sfConn, oppId) {
         
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
         
+    } else {
+        return null;
     }
-    
-    // todo
-    return null;
-    // return productList;
 }
 
 async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
@@ -116,10 +114,9 @@ async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
         let emailsList = emailCtrl.prepareEmailForOfferAcceptance(productsList, perPartnerShowInEmail);
 
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+    } else {
+        return null;
     }
-    
-    // todo
-    return;
 }
 
 async function sendOverviewToPartners_EmailTriggerController(sfConn) {
@@ -230,7 +227,6 @@ async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
     let feedItemsOfProducts = await feedCtrl.getFeedTrackItems(sfConn, feedWhereClause);
     let filteredFeeds = feedCtrl.filterSpecificTrackChangeFeeds(feedItemsOfProducts, 'stage__c', null, 'offer accepted');
     let desiredProductIds = _.map(filteredFeeds, 'ParentId');
-    // todo: if desiredProductIds is empty
 
     let desiredProducts = _.filter(productList, o => {
         if (desiredProductIds.includes(_.get(o, 'Id', '_no_id_'))) {
@@ -274,10 +270,9 @@ async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
         let emailsList = emailCtrl.prepareEmailForOfferAcceptance(productsList, perPartnerShowInEmail);
 
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
+    } else {
+        return null;
     }
-    
-    // todo: retunrn
-    return;
 
 }
 
@@ -379,6 +374,8 @@ async function sendActiveOffersToCustomerController_case3(sfConn) {
         
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
         
+    } else {
+        return null;
     }
 
 }
@@ -481,9 +478,9 @@ async function sendActiveOffersToCustomerController_case4(sfConn) {
         // todo: await
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
         
+    } else {
+        return null;
     }
-
-    // todo: return statement
 
 }
 
@@ -598,6 +595,8 @@ async function sendActiveOffersToCustomerController_case5(sfConn) {
         // todo: revise, await, return statement
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
         
+    } else {
+        return null;
     }
 
 }
@@ -712,6 +711,8 @@ async function sendActiveOffersToCustomerController_case6(sfConn) {
         // todo: revise, awiat, return statement
         emailCtrl.callSfSendMailAPI(sfConn, emailsList);
         
+    } else {
+        return null;
     }
 
 }
