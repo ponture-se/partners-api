@@ -116,6 +116,8 @@ async function acceptedOfferCanceledApi(req, res, next) {
         res.status(500).send(resBody);
 
     }
+
+    return next();
     
 }
 
