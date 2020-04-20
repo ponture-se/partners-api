@@ -32,7 +32,17 @@ async function acceptedOfferCanceledController(sfConn, oppId) {
     let desiredPartnerId = _.compact(_.map(offersMainData, o => {
         return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
     }));
-    // todo: check desiredPartnerId list not to be empty
+    
+    if (desiredPartnerId.length == 0) {
+        logger.info('acceptedOfferCanceledController: No Match', {metadata: {
+            oppId: oppId,
+            offersMainData: offersMainData,
+            desiredPartnerId: desiredPartnerId,
+            developMsg: "desiredPartnerId length eq to 0 => return"
+        }});
+        return null;
+    }
+
     let partnerWhere = {
         id: {$in: desiredPartnerId}
     }
@@ -78,7 +88,17 @@ async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
     let desiredPartnerId = _.compact(_.map(offersMainData, o => {
         return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
     }));
-    // todo: check desiredPartnerId list not to be empty
+    
+    if (desiredPartnerId.length == 0) {
+        logger.info('realTimeEmailAfterAcceptanceController: No Match', {metadata: {
+            oppId: oppId,
+            offersMainData: offersMainData,
+            desiredPartnerId: desiredPartnerId,
+            developMsg: "desiredPartnerId length eq to 0 => return"
+        }});
+        return null;
+    }
+
     let partnerWhere = {
         id: {$in: desiredPartnerId}
     }
@@ -222,6 +242,17 @@ async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
     let desiredPartnerId = _.compact(_.map(desiredProducts, o => {
         return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
     }));
+
+    if (desiredPartnerId.length == 0) {
+        logger.info('sendYesterdayAcceptedPartnerInfoController: No Match', {metadata: {
+            oppId: oppId,
+            offersMainData: offersMainData,
+            desiredPartnerId: desiredPartnerId,
+            developMsg: "desiredPartnerId length eq to 0 => return"
+        }});
+        return null;
+    }
+
     let partnerWhere = {
         id: {$in: desiredPartnerId}
     }
@@ -321,7 +352,17 @@ async function sendActiveOffersToCustomerController_case3(sfConn) {
     let desiredPartnerId = _.compact(_.map(offersList, o => {
         return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
     }));
-    // todo: if list is empty
+    
+    if (desiredPartnerId.length == 0) {
+        logger.info('sendActiveOffersToCustomerController_case3: No Match', {metadata: {
+            oppId: oppId,
+            offersMainData: offersMainData,
+            desiredPartnerId: desiredPartnerId,
+            developMsg: "desiredPartnerId length eq to 0 => return"
+        }});
+        return null;
+    }
+
     let partnerWhere = {
         id: {$in: desiredPartnerId}
     }
@@ -413,7 +454,17 @@ async function sendActiveOffersToCustomerController_case4(sfConn) {
     let desiredPartnerId = _.compact(_.map(offersList, o => {
         return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
     }));
-    // todo: check list
+
+    if (desiredPartnerId.length == 0) {
+        logger.info('sendActiveOffersToCustomerController_case4: No Match', {metadata: {
+            oppId: oppId,
+            offersMainData: offersMainData,
+            desiredPartnerId: desiredPartnerId,
+            developMsg: "desiredPartnerId length eq to 0 => return"
+        }});
+        return null;
+    }
+
     let partnerWhere = {
         id: {$in: desiredPartnerId}
     }
@@ -520,7 +571,17 @@ async function sendActiveOffersToCustomerController_case5(sfConn) {
     let desiredPartnerId = _.compact(_.map(offersList, o => {
         return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
     }));
-    // todo: check list empty
+    
+    if (desiredPartnerId.length == 0) {
+        logger.info('sendActiveOffersToCustomerController_case5: No Match', {metadata: {
+            oppId: oppId,
+            offersMainData: offersMainData,
+            desiredPartnerId: desiredPartnerId,
+            developMsg: "desiredPartnerId length eq to 0 => return"
+        }});
+        return null;
+    }
+
     let partnerWhere = {
         id: {$in: desiredPartnerId}
     }
@@ -624,7 +685,17 @@ async function sendActiveOffersToCustomerController_case6(sfConn) {
     let desiredPartnerId = _.compact(_.map(offersList, o => {
         return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
     }));
-    // todo: check list
+    
+    if (desiredPartnerId.length == 0) {
+        logger.info('sendActiveOffersToCustomerController_case6: No Match', {metadata: {
+            oppId: oppId,
+            offersMainData: offersMainData,
+            desiredPartnerId: desiredPartnerId,
+            developMsg: "desiredPartnerId length eq to 0 => return"
+        }});
+        return null;
+    }
+
     let partnerWhere = {
         id: {$in: desiredPartnerId}
     }
