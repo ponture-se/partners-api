@@ -10,8 +10,12 @@ async function realTimeEmailAfterAcceptanceApi(req, res, next) {
 
     let resBody;
     try{
-        await triggerCtrl.realTimeEmailAfterAcceptanceController(sfConn, proIdList);
-        resBody = myResponse(true, null, 200, 'Emails are Sent to SF API.');
+        resbody = await triggerCtrl.realTimeEmailAfterAcceptanceController(sfConn, proIdList);
+        if (resbody == null) {
+            resBody = myResponse(true, null, 200, 'No Records Found, which satisfied critera.');
+        } else {
+            resBody = myResponse(true, resBody, 200, 'Emails has been sent');
+        }
         res.status(200).send(resBody);
     } catch (e) {
         if (e instanceof salesforceException) {
@@ -31,8 +35,12 @@ async function sendOverviewToPartners_EmailTriggerApi(req, res, next) {
 
     let resBody;
     try{
-        await triggerCtrl.sendOverviewToPartners_EmailTriggerController(sfConn);
-        resBody = myResponse(true, null, 200, 'Emails are Sent to SF API.');
+        resbody = await triggerCtrl.sendOverviewToPartners_EmailTriggerController(sfConn);
+        if (resbody == null) {
+            resBody = myResponse(true, null, 200, 'No Records Found, which satisfied critera.');
+        } else {
+            resBody = myResponse(true, resBody, 200, 'Emails has been sent');
+        }
         res.status(200).send(resBody);
     } catch (e) {
         if (e instanceof salesforceException) {
@@ -52,8 +60,12 @@ async function sendYesterdayAcceptedPartnerInfoApi(req, res, next) {
     
     let resBody;
     try{
-        await triggerCtrl.sendYesterdayAcceptedPartnerInfoController(sfConn);
-        resBody = myResponse(true, null, 200, 'Emails are Sent to SF API.');
+        resBody = await triggerCtrl.sendYesterdayAcceptedPartnerInfoController(sfConn);
+        if (resbody == null) {
+            resBody = myResponse(true, null, 200, 'No Records Found, which satisfied critera.');
+        } else {
+            resBody = myResponse(true, resBody, 200, 'Emails has been sent');
+        }
         res.status(200).send(resBody);
     } catch (e) {
         if (e instanceof salesforceException) {
@@ -78,16 +90,16 @@ async function sendActiveOffersToCustomerApi(req, res, next) {
     try{
         switch (caseNum) {
             case 3:
-                await triggerCtrl.sendActiveOffersToCustomerController_case3(sfConn);       
+                resBody = await triggerCtrl.sendActiveOffersToCustomerController_case3(sfConn);       
                 break;
             case 4:
-                await triggerCtrl.sendActiveOffersToCustomerController_case4(sfConn);       
+                resBody = await triggerCtrl.sendActiveOffersToCustomerController_case4(sfConn);       
                 break;
             case 5:
-                await triggerCtrl.sendActiveOffersToCustomerController_case5(sfConn);       
+                resBody = await triggerCtrl.sendActiveOffersToCustomerController_case5(sfConn);       
                 break;
             case 6:
-                await triggerCtrl.sendActiveOffersToCustomerController_case6(sfConn);       
+                resBody = await triggerCtrl.sendActiveOffersToCustomerController_case6(sfConn);       
                 break;
     
             default:
@@ -97,7 +109,11 @@ async function sendActiveOffersToCustomerApi(req, res, next) {
 
         
         if (!invalidCaseNum) {
-            resBody = myResponse(true, null, 200, 'Emails are Sent to SF API.');
+            if (resbody == null) {
+                resBody = myResponse(true, null, 200, 'No Records Found, which satisfied critera.');
+            } else {
+                resBody = myResponse(true, resBody, 200, 'Emails has been sent');
+            }
             res.status(200).send(resBody);
         } else {
             resBody = myResponse(false, null, 400, 'Invalid Case Number');
@@ -125,9 +141,13 @@ async function acceptedOfferCanceledApi(req, res, next) {
     
     try {
 
-        await triggerCtrl.acceptedOfferCanceledController(sfConn, oppId);
-
-        resBody = myResponse(true, null, 200, 'Emails Send To SF API.');
+        resBody = await triggerCtrl.acceptedOfferCanceledController(sfConn, oppId);
+        
+        if (resbody == null) {
+            resBody = myResponse(true, null, 200, 'No Records Found, which satisfied critera.');
+        } else {
+            resBody = myResponse(true, resBody, 200, 'Emails has been sent');
+        }
         res.status(200).send(resBody);
 
     } catch (e) {
