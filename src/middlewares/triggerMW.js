@@ -14,7 +14,7 @@ async function realTimeEmailAfterAcceptanceApi(req, res, next) {
         if (resBody == null) {
             resBody = myResponse(true, null, 200, 'No Records Found, which satisfied critera.');
         } else {
-            resBody = myResponse(true, resBody, 200, 'Emails has been sent');
+            resBody = myResponse(true, resBody.data, 200, 'Emails has been sent');
         }
         res.status(200).send(resBody);
     } catch (e) {
@@ -39,7 +39,7 @@ async function sendOverviewToPartners_EmailTriggerApi(req, res, next) {
         if (resBody == null) {
             resBody = myResponse(true, null, 200, 'No Records Found, which satisfied critera.');
         } else {
-            resBody = myResponse(true, resBody, 200, 'Emails has been sent');
+            resBody = myResponse(true, resBody.data, 200, 'Emails has been sent');
         }
         res.status(200).send(resBody);
     } catch (e) {
@@ -64,7 +64,7 @@ async function sendYesterdayAcceptedPartnerInfoApi(req, res, next) {
         if (resBody == null) {
             resBody = myResponse(true, null, 200, 'No Records Found, which satisfied critera.');
         } else {
-            resBody = myResponse(true, resBody, 200, 'Emails has been sent');
+            resBody = myResponse(true, resBody.data, 200, 'Emails has been sent');
         }
         res.status(200).send(resBody);
     } catch (e) {
@@ -112,7 +112,7 @@ async function sendActiveOffersToCustomerApi(req, res, next) {
             if (resBody == null) {
                 resBody = myResponse(true, null, 200, 'No Records Found, which satisfied critera.');
             } else {
-                resBody = myResponse(true, resBody, 200, 'Emails has been sent');
+                resBody = myResponse(true, resBody.data, 200, 'Emails has been sent');
             }
             res.status(200).send(resBody);
         } else {
@@ -146,7 +146,7 @@ async function acceptedOfferCanceledApi(req, res, next) {
         if (resBody == null) {
             resBody = myResponse(true, null, 200, 'No Records Found, which satisfied critera.');
         } else {
-            resBody = myResponse(true, resBody, 200, 'Emails has been sent');
+            resBody = myResponse(true, resBody.data, 200, 'Emails has been sent');
         }
         res.status(200).send(resBody);
 
