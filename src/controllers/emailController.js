@@ -14,7 +14,7 @@ function prepareEmailForOfferAcceptance(productList, perPartnerShowInEmail) {
     let emailsList = [];
     let subject = 'Partner Info By Trigger 7';
     
-    let htmlBodyAddr = staticResource + "\\confirmOfferAccepted1.html";
+    let htmlBodyAddr = path.resolve(staticResource, "./confirmOfferAccepted1.html");
     
     let emailTemplate;
     try {
@@ -101,8 +101,8 @@ function prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail)
 
     let subject = "Trigger ActiveOffers";
         
-    let mainHtmlBodyAddr = staticResource + "\\offersOverview.html";
-    let offerTemplateHtmlAddr = staticResource + "\\offerTemplate.html";
+    let mainHtmlBodyAddr = path.resolve(staticResource, "./offersOverview.html");
+    let offerTemplateHtmlAddr = path.resolve(staticResource, "./offerTemplate.html");
 
     let mainHtmlTemplate,
         offerHtmlTemplate;
@@ -178,7 +178,7 @@ function prepareOverviewEmailForPartners(partners, productListPerPartners, spoLi
     let subject = 'Check The Overview of Your Ponture Account'
 
     
-    let htmlTemplateAddr = staticResource + "\\partnerOverview.html";
+    let htmlTemplateAddr = path.resolve(staticResource, "./partnerOverview.html");
 
     let mainHtmlTemplate;
     try {
@@ -273,8 +273,8 @@ function prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInE
 
     let subject = "Trigger ActiveOffers After an Accepted Offer Canceled";
         
-    let mainHtmlBodyAddr = staticResource + "\\offersOverview.html";
-    let offerTemplateHtmlAddr = staticResource + "\\offerTemplate.html";
+    let mainHtmlBodyAddr = path.resolve(staticResource, "./offersOverview.html");
+    let offerTemplateHtmlAddr = path.resolve(staticResource, "./offerTemplate.html");
 
     let mainHtmlTemplate,
         offerHtmlTemplate;
