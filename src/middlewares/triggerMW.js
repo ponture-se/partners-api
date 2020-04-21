@@ -10,8 +10,8 @@ async function realTimeEmailAfterAcceptanceApi(req, res, next) {
 
     let resBody;
     try{
-        resbody = await triggerCtrl.realTimeEmailAfterAcceptanceController(sfConn, proIdList);
-        if (resbody == null) {
+        resBody = await triggerCtrl.realTimeEmailAfterAcceptanceController(sfConn, proIdList);
+        if (resBody == null) {
             resBody = myResponse(true, null, 200, 'No Records Found, which satisfied critera.');
         } else {
             resBody = myResponse(true, resBody, 200, 'Emails has been sent');
@@ -35,8 +35,8 @@ async function sendOverviewToPartners_EmailTriggerApi(req, res, next) {
 
     let resBody;
     try{
-        resbody = await triggerCtrl.sendOverviewToPartners_EmailTriggerController(sfConn);
-        if (resbody == null) {
+        resBody = await triggerCtrl.sendOverviewToPartners_EmailTriggerController(sfConn);
+        if (resBody == null) {
             resBody = myResponse(true, null, 200, 'No Records Found, which satisfied critera.');
         } else {
             resBody = myResponse(true, resBody, 200, 'Emails has been sent');
@@ -61,7 +61,7 @@ async function sendYesterdayAcceptedPartnerInfoApi(req, res, next) {
     let resBody;
     try{
         resBody = await triggerCtrl.sendYesterdayAcceptedPartnerInfoController(sfConn);
-        if (resbody == null) {
+        if (resBody == null) {
             resBody = myResponse(true, null, 200, 'No Records Found, which satisfied critera.');
         } else {
             resBody = myResponse(true, resBody, 200, 'Emails has been sent');
@@ -109,7 +109,7 @@ async function sendActiveOffersToCustomerApi(req, res, next) {
 
         
         if (!invalidCaseNum) {
-            if (resbody == null) {
+            if (resBody == null) {
                 resBody = myResponse(true, null, 200, 'No Records Found, which satisfied critera.');
             } else {
                 resBody = myResponse(true, resBody, 200, 'Emails has been sent');
@@ -143,7 +143,7 @@ async function acceptedOfferCanceledApi(req, res, next) {
 
         resBody = await triggerCtrl.acceptedOfferCanceledController(sfConn, oppId);
         
-        if (resbody == null) {
+        if (resBody == null) {
             resBody = myResponse(true, null, 200, 'No Records Found, which satisfied critera.');
         } else {
             resBody = myResponse(true, resBody, 200, 'Emails has been sent');
