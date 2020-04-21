@@ -67,10 +67,19 @@ class inputValidationException extends Error {
     }
 }
 
+class typeException extends Error {
+    constructor(message, errObj = null) {
+        super(message);
+        this.name = this.constructor.name;
+        this.metadata = errObj;
+    }
+}
+
 
 
 module.exports = {
     salesforceException,
     externalCalloutException,
-    inputValidationException
+    inputValidationException,
+    typeException
 }
