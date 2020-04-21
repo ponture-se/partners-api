@@ -1,0 +1,64 @@
+
+<html>
+    <body>
+        <p>Your Recent Accepted Offers:</p>
+        <hr>
+        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-spacing:0 !important; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
+            <tbody>
+              <tr>
+                  <th align="left">Offer No.</th>
+                  <th align="left">Lead Name</th>
+                  <th align="left">Lead Organization Number</th>
+              </tr>
+              {{Offers_List}}
+            </tbody>
+        </table>
+        
+        <br><br>
+
+        <p>New Leads:</p>
+        <hr>
+        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-spacing:0 !important; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
+        <tbody>    
+            <tr>
+                <th align="left">Lead Number</th>
+                <th align="left">Amount</th>
+            </tr>
+            {{New_Leads_List}}
+        </tbody>
+        </table>
+
+        <br><br>
+
+        <p>Open Leads:</p>
+        <hr>
+        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-spacing:0 !important; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
+        <tbody>    
+            <tr>
+                <th align="left">Lead Number</th>
+                <th align="left">Amount</th>
+            </tr>
+            {{Open_Leads_List}}
+        </tbody>
+        </table>
+
+        <br><br>
+
+        <p>Summary:</p>
+        <hr>
+        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-spacing:0 !important; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
+        <tbody>    
+            <tr>
+                <th align="left">Total Number of New Leads</th>
+                <th align="left">Total Number of Open Leads</th>
+            </tr>
+            <tr>
+                <td align='left'>{{Total_No_New_Leads}}</td>
+                <td align='left'>{{Total_No_Open_Leads}}</td>
+            </tr>
+        </tbody>
+        </table>
+
+        
+    </body>
+</html>
