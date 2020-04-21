@@ -272,7 +272,7 @@ function prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInE
 
     let productsPerOpp = _.groupBy(productsList, 'Supplier_Partner_Opportunity__r.OpportunityId__c');
 
-    let subject = "Trigger ActiveOffers";
+    let subject = "Trigger ActiveOffers After an Accepted Offer Canceled";
         
     let mainHtmlBodyAddr = staticResource + "\\offersOverview.html";
     let offerTemplateHtmlAddr = staticResource + "\\offerTemplate.html";
