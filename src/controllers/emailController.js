@@ -22,11 +22,10 @@ function prepareEmailForOfferAcceptance(productList, perPartnerShowInEmail) {
     } catch (e) {
         logger.error('readFileSync Error', {metadata: {
             addrs: [
-                mainHtmlBodyAddr,
-                offerHtmlTemplate
+                htmlBodyAddr
             ],
             input: {
-                productList: productsList,
+                productList: productList,
                 perPartnerShowInEmail: perPartnerShowInEmail
             }
         }});
@@ -114,7 +113,7 @@ function prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail)
         logger.error('readFileSync Error', {metadata: {
             addrs: [
                 mainHtmlBodyAddr,
-                offerHtmlTemplate
+                offerTemplateHtmlAddr
             ],
             input: {
                 productList: productsList,
@@ -187,7 +186,7 @@ function prepareOverviewEmailForPartners(partners, productListPerPartners, spoLi
     } catch (e) {
         logger.error('readFileSync Error', {metadata: {
             error : e,
-            addrs: htmlTemplateAddr,
+            addrs: [htmlTemplateAddr],
             input: {
                 partners: partners,
                 productListPerPartners: productListPerPartners,
@@ -286,7 +285,7 @@ function prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInE
         logger.error('readFileSync Error', {metadata: {
             addrs: [
                 mainHtmlBodyAddr,
-                offerHtmlTemplate
+                offerTemplateHtmlAddr
             ],
             input: {
                 productList: productsList,
