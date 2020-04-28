@@ -50,6 +50,13 @@ exports.getPartnerProducts = function(req, res, next) {
 
 exports.getPartnerOfferColumns = function(req, res, next) {
   var accessToken = req.access_token;
+  let version = req.params.version;
+  if (version) {
+    req.query.version = version;
+  } else {
+    req.query.version = 'v1';
+  }
+
   var apiRoot =
     process.env.SALESFORCE_API_ROOT ||
     "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
