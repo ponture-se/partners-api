@@ -35,6 +35,8 @@ app.use(cookieParser());
 app.use("/auth", auth);
 app.use("/opportunity", opportunity);
 app.use("/quote", quote);
+app.use("/files", file);
+
 app.use("/trigger", trigger);
 
 module.exports = app;

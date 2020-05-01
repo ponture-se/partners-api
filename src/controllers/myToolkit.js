@@ -65,11 +65,23 @@ function getHourOfDateString(convertedDate) {
     return parseInt(hour);
 }
 
+function formatNumber(num){
+    num = num.toString().split('.');
+
+    let intPart = num[0];
+    let floatPart = (num[1]) ? ('.' + num[1]) : '';
+
+    let result = intPart.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1 ") + floatPart;
+
+    return result;
+}
+
 
 module.exports = {
     addPairToReqNeeds,
     makeSFConnection,
     getRecordTypeId,
     convertDatetimeToSwedenLocale,
-    getHourOfDateString
+    getHourOfDateString,
+    formatNumber
 }

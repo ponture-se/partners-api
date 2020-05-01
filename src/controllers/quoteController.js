@@ -1,4 +1,6 @@
 const axios = require("axios");
+const queryString = require("query-string");
+const _ = require('lodash');
 
 exports.getPartnerProducts = function(req, res, next) {
   var accessToken = req.access_token;
@@ -48,6 +50,13 @@ exports.getPartnerProducts = function(req, res, next) {
 
 exports.getPartnerOfferColumns = function(req, res, next) {
   var accessToken = req.access_token;
+  let version = req.params.version;
+  if (version) {
+    req.query.version = version;
+  } else {
+    req.query.version = 'v1';
+  }
+
   var apiRoot =
     process.env.SALESFORCE_API_ROOT ||
     "https://crmdev-ponture-crmdev.cs84.force.com"; // for prod set to https://api.zignsec.com/v2
@@ -453,11 +462,21 @@ exports.acceptOffer = function(req, res, next) {
     });
 };
 
-async function fundAppController (sfConn, offerId, partnerId) {
-	let params = '?offerId=' + offerId + '&partnerId=' + partnerId;
-	
+async function fundAppController (sfConn, offerId, partnerId, loanAmount, loanPeriod) {
+  
+  let params = {
+    offerId: offerId,
+    partnerId: partnerId,
+    loanAmount: loanAmount,
+    loanPeriod: loanPeriod
+  }
+
+  params = _.pickBy(params, _.identity);
+
+  let qs = "?" + queryString.stringify(params);
+  
 	// Error handeled in parent
-	let result = await sfConn.apex.put('/fundApp' + params);
+	let result = await sfConn.apex.put('/fundApp' + qs);
 
 	return result;
 }
