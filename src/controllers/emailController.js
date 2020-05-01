@@ -4,7 +4,7 @@ const fs = require('fs');
 const util = require('util');
 const path = require("path");
 const {salesforceException} = require('./customeException');
-
+const myToolkit = require('./myToolkit');
 
 const staticResource = path.resolve(__dirname, '../staticResources');
 
@@ -237,7 +237,7 @@ function prepareOverviewEmailForPartners(partners, productListPerPartners, spoLi
 
                 newSpoListHtml += '<tr>' +
                                 '<td align="left">' + leadNumber + '</td>' +
-                                '<td align="left">' + Amount + ' kr </td>' +
+                                '<td align="left">' + myToolkit.formatNumber(Amount) + ' kr </td>' +
                             '</tr>';
         }
 
@@ -247,7 +247,7 @@ function prepareOverviewEmailForPartners(partners, productListPerPartners, spoLi
 
                 openedSpoListHtml += '<tr>' +
                                 '<td align="left">' + leadNumber + '</td>' +
-                                '<td align="left">' + Amount + ' kr</td>' +
+                                '<td align="left">' + myToolkit.formatNumber(Amount) + ' kr</td>' +
                             '</tr>';
         }
 
