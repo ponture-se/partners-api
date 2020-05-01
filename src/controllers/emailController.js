@@ -12,7 +12,7 @@ const staticResource = path.resolve(__dirname, '../staticResources');
 function prepareEmailForOfferAcceptance(productList, perPartnerShowInEmail) {
     // FIXME: Mock Mail + Use perPartnerShowInEmail
     let emailsList = [];
-    let subject = 'Accepted Offer Canceled Subject';
+    let subject = 'Trigger For Offer Acceptance';
     
     let htmlBodyAddr = path.resolve(staticResource, "./confirmOfferAccepted1.html");
     
