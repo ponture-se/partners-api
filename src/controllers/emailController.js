@@ -57,7 +57,7 @@ function prepareEmailForOfferAcceptance(productList, perPartnerShowInEmail) {
         html = html.replace(/{{First_Name}}/gi, customerName);
         html = html.replace(/{{partner_name}}/gi, partnerName);
         html = html.replace(/{{partner_telefon}}/gi, partnerPhone);
-        html = html.replace(/{{loan_amount}}/gi, loanAmount);
+        html = html.replace(/{{loan_amount}}/gi, myToolkit.formatNumber(loanAmount));
         html = html.replace(/{{loan_period}}/gi, loanPeriod);
         html = html.replace(/{{Dynamic_fields}}/gi, partnerDynamicFields);
 
@@ -153,7 +153,7 @@ function prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail)
             // let totalMonthlyPayment = _.get(pro, 'details.Total_monthly_payment__c', '---') || '---';            
             
             offerHtml = offerHtml.replace(/{{partner_name}}/gi, partnerName);
-            offerHtml = offerHtml.replace(/{{Loan_amount}}/gi, loanAmount);
+            offerHtml = offerHtml.replace(/{{Loan_amount}}/gi, myToolkit.formatNumber(loanAmount));
             offerHtml = offerHtml.replace(/{{Loan_period}}/gi, loanPeriod);
             // offerHtml = offerHtml.replace(/{{Totalt_kostnad_per_månad}}/gi, totalMonthlyPayment);
             offerHtml = offerHtml.replace(/{{Dynamic_fields}}/gi, partnerDynamicFields);
@@ -325,7 +325,7 @@ function prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInE
             // let totalMonthlyPayment = _.get(pro, 'details.Total_monthly_payment__c', '---') || '---';            
             
             offerHtml = offerHtml.replace(/{{partner_name}}/gi, partnerName);
-            offerHtml = offerHtml.replace(/{{Loan_amount}}/gi, loanAmount);
+            offerHtml = offerHtml.replace(/{{Loan_amount}}/gi, myToolkit.formatNumber(loanAmount));
             offerHtml = offerHtml.replace(/{{Loan_period}}/gi, loanPeriod);
             // offerHtml = offerHtml.replace(/{{Totalt_kostnad_per_månad}}/gi, totalMonthlyPayment);
             offerHtml = offerHtml.replace(/{{Dynamic_fields}}/gi, partnerDynamicFields);
