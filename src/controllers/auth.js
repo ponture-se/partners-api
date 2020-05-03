@@ -61,7 +61,7 @@ function login(req, res, next) {
       }
     })
     .catch(function(error) {
-      res.status(error.response.data.statusCode).send(error.response.data);
+      res.status(error.response.data.statusCode || 500).send(error.response.data);
     });
 }
 
