@@ -10,6 +10,8 @@ const _ = require('lodash');
 // const jsforce = require('jsforce');
 const myToolkit = require('./myToolkit');
 
+const activeOppStages = ['Funded/Closed Won', 'Not Funded/ Closed lost'];
+
 
 async function acceptedOfferCanceledController(sfConn, oppId) {
     // Section: Get Offers with details
@@ -20,6 +22,8 @@ async function acceptedOfferCanceledController(sfConn, oppId) {
 
     const whereClause = {
         "Supplier_Partner_Opportunity__r.OpportunityId__c": oppId,
+        "Supplier_Partner_Opportunity__r.OpportunityId__r.Notification__c": true,
+        "Supplier_Partner_Opportunity__r.OpportunityId__r.Key_Deal__c": false,
         stage__c: {$in: proActiveStage}
     }
 
@@ -74,7 +78,9 @@ async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
     
     // Section: Get Offers with details
     const whereClause = {
-        Id: {$in: proIdList}
+        Id: {$in: proIdList},
+        "Supplier_Partner_Opportunity__r.OpportunityId__r.Notification__c": true,
+        "Supplier_Partner_Opportunity__r.OpportunityId__r.stageName": {$nin: activeOppStages}
     }
 
     // get offers main data
@@ -195,6 +201,8 @@ async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
     let whereClause = {
         stage__c: "offer accepted",
         // lastModifiedDate: jsforce.Date.YESTERDAY
+        "Supplier_Partner_Opportunity__r.OpportunityId__r.Notification__c": true,
+        "Supplier_Partner_Opportunity__r.OpportunityId__r.stageName": {$nin: activeOppStages},
         lastModifiedDate: jsforce.Date.LAST_N_DAYS(1)
     }
     let productList = await sfConn.sobject('Product__c')
@@ -291,6 +299,7 @@ async function sendActiveOffersToCustomerController_case3(sfConn) {
     // Section: get opportunity with stage: offer recieved in time
     let oppWhere = {
         stageName: 'Offer Received',
+        Notification__c: true,
         lastModifiedDate: jsforce.Date.TODAY
     }
     let hourCondition = {
@@ -394,6 +403,7 @@ async function sendActiveOffersToCustomerController_case4(sfConn) {
     // Section: get opportunity with stage: offer recieved in time
     let oppWhere = {
         stageName: 'Offer Received',
+        Notification__c: true,
         lastModifiedDate: jsforce.Date.LAST_N_DAYS(1)
     }
     let hourCondition = {
@@ -499,6 +509,7 @@ async function sendActiveOffersToCustomerController_case5(sfConn) {
     // Section: get opportunity with stage: offer recieved in time
     let oppWhere = {
         stageName: 'Offer Received',
+        Notification__c: true,
         lastModifiedDate: jsforce.Date.LAST_N_DAYS(2)
     }
     let hourCondition = {
@@ -614,6 +625,7 @@ async function sendActiveOffersToCustomerController_case6(sfConn) {
     // Section: get opportunity with stage: offer recieved in time
     let oppWhere = {
         stageName: 'Offer Received',
+        Notification__c: true,
         lastModifiedDate: jsforce.Date.LAST_N_DAYS(3)
     }
     let hourCondition = {
