@@ -20,6 +20,8 @@ async function acceptedOfferCanceledController(sfConn, oppId) {
 
     const whereClause = {
         "Supplier_Partner_Opportunity__r.OpportunityId__c": oppId,
+        "Supplier_Partner_Opportunity__r.OpportunityId__r.Notification__c": true,
+        "Supplier_Partner_Opportunity__r.OpportunityId__r.Key_Deal__c": false,
         stage__c: {$in: proActiveStage}
     }
 
