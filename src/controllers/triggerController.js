@@ -10,6 +10,8 @@ const _ = require('lodash');
 // const jsforce = require('jsforce');
 const myToolkit = require('./myToolkit');
 
+const activeOppStages = ['Funded/Closed Won', 'Not Funded/ Closed lost'];
+
 
 async function acceptedOfferCanceledController(sfConn, oppId) {
     // Section: Get Offers with details
@@ -77,7 +79,8 @@ async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
     // Section: Get Offers with details
     const whereClause = {
         Id: {$in: proIdList},
-        "Supplier_Partner_Opportunity__r.OpportunityId__r.Notification__c": true
+        "Supplier_Partner_Opportunity__r.OpportunityId__r.Notification__c": true,
+        "Supplier_Partner_Opportunity__r.OpportunityId__r.stageName": {$nin: activeOppStages}
     }
 
     // get offers main data
@@ -199,6 +202,7 @@ async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
         stage__c: "offer accepted",
         // lastModifiedDate: jsforce.Date.YESTERDAY
         "Supplier_Partner_Opportunity__r.OpportunityId__r.Notification__c": true,
+        "Supplier_Partner_Opportunity__r.OpportunityId__r.stageName": {$nin: activeOppStages},
         lastModifiedDate: jsforce.Date.LAST_N_DAYS(1)
     }
     let productList = await sfConn.sobject('Product__c')
