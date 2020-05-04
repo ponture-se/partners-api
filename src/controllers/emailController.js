@@ -380,6 +380,10 @@ async function callSfSendMailAPI(sfConn, emailsList) {
 
     try {
         let result = await sfConn.apex.post("/sendEmails", reqBody);
+        let dataOfResult = _.get(result, 'data', {});
+        dataOfResult.emailsInfo = _.map(emailsList, email => {
+            return _.pick(email, ['to', 'subject', 'whatId']);
+        });
         return result;
     } catch (err) {
         logger.error('callSfSendMailAPI', {metadata:{
