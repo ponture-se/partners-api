@@ -304,7 +304,7 @@ async function sendActiveOffersToCustomerController_case3(sfConn) {
     }
     let hourCondition = {
         min: 0,
-        max: 12
+        max: 23
     }
     let oppList = await sfConn.sobject('opportunity')
                             .select('*')
