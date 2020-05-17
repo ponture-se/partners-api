@@ -59,7 +59,8 @@ async function acceptedOfferCanceledController(sfConn, oppId) {
     
     // Section: Send Mail if any product exist
     if (productsList.length > 0) {
-        let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        // let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        let perPartnerShowInEmail = await generatePerProMasterIdShowInEmail(sfConn, partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInEmail);
         
         let sendEmailResult = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
@@ -88,7 +89,7 @@ async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
     if (offersMainData == null || offersMainData.length == 0) {
         return;
     }
-    
+
     // Get Desired Partner Ids to get Product Details
     let desiredPartnerId = _.compact(_.map(offersMainData, o => {
         return _.get(o, 'Supplier_Partner_Opportunity__r.SupplierAccountId__c', null);
@@ -96,7 +97,6 @@ async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
     
     if (desiredPartnerId.length == 0) {
         logger.info('realTimeEmailAfterAcceptanceController: No Match', {metadata: {
-            oppId: oppId,
             offersMainData: offersMainData,
             desiredPartnerId: desiredPartnerId,
             developMsg: "desiredPartnerId length eq to 0 => return"
@@ -116,7 +116,8 @@ async function realTimeEmailAfterAcceptanceController(sfConn, proIdList) {
     
     // Section: Send Mail if any product exist
     if (productsList.length > 0) {
-        let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        // let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        let perPartnerShowInEmail = await generatePerProMasterIdShowInEmail(sfConn, partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForOfferAcceptance(productsList, perPartnerShowInEmail);
 
         let sendEmailResult = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
@@ -250,8 +251,6 @@ async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
 
     if (desiredPartnerId.length == 0) {
         logger.info('sendYesterdayAcceptedPartnerInfoController: No Match', {metadata: {
-            oppId: oppId,
-            offersMainData: offersMainData,
             desiredPartnerId: desiredPartnerId,
             developMsg: "desiredPartnerId length eq to 0 => return"
         }});
@@ -274,7 +273,8 @@ async function sendYesterdayAcceptedPartnerInfoController(sfConn) {
 
     // Section: Send Mail if any product exist
     if (productsList.length > 0) {
-        let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        // let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        let perPartnerShowInEmail = await generatePerProMasterIdShowInEmail(sfConn, partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForOfferAcceptance(productsList, perPartnerShowInEmail);
 
         let sendEmailResult = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
@@ -378,7 +378,8 @@ async function sendActiveOffersToCustomerController_case3(sfConn) {
 
     // Section: email Section
     if (productsList.length > 0) {
-        let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        // let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        let perPartnerShowInEmail = await generatePerProMasterIdShowInEmail(sfConn, partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail);
         
         let sendEmailResult = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
@@ -481,7 +482,8 @@ async function sendActiveOffersToCustomerController_case4(sfConn) {
 
     // Section: email Section
     if (productsList.length > 0) {
-        let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        // let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        let perPartnerShowInEmail = await generatePerProMasterIdShowInEmail(sfConn, partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail);
         
         let sendEmailResult = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
@@ -599,7 +601,8 @@ async function sendActiveOffersToCustomerController_case5(sfConn) {
 
     // Section: email Section
     if (productsList.length > 0) {
-        let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        // let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        let perPartnerShowInEmail = await generatePerProMasterIdShowInEmail(sfConn, partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail);
         let sendEmailResult = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
 
@@ -714,7 +717,8 @@ async function sendActiveOffersToCustomerController_case6(sfConn) {
 
     // Section: email Section
     if (productsList.length > 0) {
-        let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        // let perPartnerShowInEmail = generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName);
+        let perPartnerShowInEmail = await generatePerProMasterIdShowInEmail(sfConn, partnerPMasterMap, trBoxPerCobjName);
         let emailsList = emailCtrl.prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail);
         
         let sendEmailResult = await emailCtrl.callSfSendMailAPI(sfConn, emailsList);
@@ -744,6 +748,64 @@ function generatePerPartnerShowInEmail(partnerPMasterMap, trBoxPerCobjName) {
             // }), 'Product_Type__c');
 
             result[partnerId] = _.orderBy(productTypesOfPartner, ['index__c'], ['acs']);
+        }
+    }
+
+    return result;
+}
+
+function generatePerDetailObjectNameShowInEmail(partnerPMasterMap, trBoxPerCobjName) {
+    let result = {};
+
+    for (let partnerId in partnerPMasterMap) {
+        let customObjectName = partnerPMasterMap[partnerId];
+        let trOfPartner = trBoxPerCobjName[customObjectName];
+
+        if (trOfPartner.success) {
+            // let productTypesOfPartner = _.filter(trOfPartner.result, o => {
+            //     return o.Show_In_Email__c;
+            // });
+
+            let productTypesOfPartner = _.groupBy(_.filter(trOfPartner.result, o => {
+                return o.Show_In_Email__c;
+            }), 'Product_Type__c');
+            
+            for(let proType of Object.keys(productTypesOfPartner)){
+                let typeTrBox = _.get(productTypesOfPartner, proType);
+
+                result[proType + '_' + customObjectName + '__c'] = _.orderBy(typeTrBox, ['index__c'], ['acs']);
+            }
+        }
+    }
+
+    return result;
+}
+
+async function generatePerProMasterIdShowInEmail(sfConn, partnerPMasterMap, trBoxPerCobjName) {
+    let result = {};
+
+    let cObjNamePerProMasterId = await productCtrl.getProMasterIdPerDetailsObjApiNames(sfConn);
+
+    for (let partnerId in partnerPMasterMap) {
+        let customObjectName = partnerPMasterMap[partnerId];
+        let trOfPartner = trBoxPerCobjName[customObjectName];
+
+        if (trOfPartner.success) {
+            // let productTypesOfPartner = _.filter(trOfPartner.result, o => {
+            //     return o.Show_In_Email__c;
+            // });
+
+            let productTypesOfPartner = _.groupBy(_.filter(trOfPartner.result, o => {
+                return o.Show_In_Email__c;
+            }), 'Product_Type__c');
+            
+            for(let proType of Object.keys(productTypesOfPartner)){
+                let typeTrBox = _.get(productTypesOfPartner, proType);
+                let detailObjName = proType + '_' + customObjectName + '__c';
+                let proMasterId = _.get(cObjNamePerProMasterId, detailObjName);
+
+                result[proMasterId] = _.orderBy(typeTrBox, ['index__c'], ['acs']);
+            }
         }
     }
 

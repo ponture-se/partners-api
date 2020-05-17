@@ -292,9 +292,68 @@ async function getProductWithDetailsByPartnerIdAndcObjName(sfConn, partnerId, cu
     return finalResult;
 }
 
+async function getDetailsObjApiNamesPerProducts(sfConn, productsList) {
+    let result = {};
+
+    let pmIdList = Object.keys(_.groupBy(productsList, "Product_Master__c"));
+
+    let proMastersData = await sfConn.sobject("Product_Master__c")
+                                .select("*")
+                                .where({
+                                    id: {$in: pmIdList}
+                                })
+                                .execute();
+    
+    let proMastersDataById = _.groupBy(proMastersData, "Id");
+
+    productsList.forEach(element => {
+        let proId = element.Id;
+        let proMasterId = element.Product_Master__c;
+
+        let proMasterObj = _.get(proMastersDataById, [proMasterId, "0"]);
+
+        result[proId] = proMasterObj.Custom_Object_Type__c + '_' + proMasterObj.Custom_Object_Name__c + '__c';
+    });
+    
+    return result;
+
+}
+
+
+async function getDetailsObjApiNamesPerProMasterId(sfConn) {
+    let result = {};
+
+    let proMastersData = await sfConn.sobject("Product_Master__c")
+                                .select("*")
+                                .execute();
+
+    _.forEach(proMastersData, o => {
+        result[o.Id] = o.Custom_Object_Type__c + '_' + o.Custom_Object_Name__c + '__c';
+    });
+    
+    return result;
+}
+
+async function getProMasterIdPerDetailsObjApiNames(sfConn) {
+    let result = {};
+
+    let proMastersData = await sfConn.sobject("Product_Master__c")
+                                .select("*")
+                                .execute();
+
+    _.forEach(proMastersData, o => {
+        result[o.Custom_Object_Type__c + '_' + o.Custom_Object_Name__c + '__c'] = o.Id;
+    });
+    
+    return result;
+}
+
 
 module.exports = {
     getProdcutsOfAllPartnersWithDetailsWhere,
     getProdcutsWithDetailsWhere_specificPartner,
-    getProductsWhere
+    getProductsWhere,
+    getDetailsObjApiNamesPerProducts,
+    getDetailsObjApiNamesPerProMasterId,
+    getProMasterIdPerDetailsObjApiNames
 }
