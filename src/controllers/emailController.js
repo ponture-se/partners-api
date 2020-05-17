@@ -36,7 +36,8 @@ function prepareEmailForOfferAcceptance(productList, perPartnerShowInEmail) {
         let partner = _.get(pro, 'Supplier_Partner_Opportunity__r.SupplierAccountId__r');
 
         let partnerId = _.get(partner, 'Organization_Number__c');
-        let showInEmailForPartner = (partnerId) ? _.get(perPartnerShowInEmail, partnerId, []) : [];
+        let showInEmailForPartner = _.get(perPartnerShowInEmail, pro.Product_Master__c, []);
+        // let showInEmailForPartner = (partnerId) ? _.get(perPartnerShowInEmail, partnerId, []) : [];
 
         let partnerDynamicFields = generateDynamicContent(pro, showInEmailForPartner);
 
@@ -118,7 +119,8 @@ function prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail)
             let partner = _.get(pro, 'Supplier_Partner_Opportunity__r.SupplierAccountId__r');
 
             let partnerId = _.get(partner, 'Organization_Number__c');
-            let showInEmailForPartner = (partnerId) ? _.get(perPartnerShowInEmail, partnerId, []) : [];
+            let showInEmailForPartner = _.get(perPartnerShowInEmail, pro.Product_Master__c, []);
+            // let showInEmailForPartner = (partnerId) ? _.get(perPartnerShowInEmail, partnerId, []) : [];
 
             let partnerDynamicFields = generateDynamicContent(pro, showInEmailForPartner);
             
@@ -289,7 +291,8 @@ function prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInE
             let partner = _.get(pro, 'Supplier_Partner_Opportunity__r.SupplierAccountId__r');
 
             let partnerId = _.get(partner, 'Organization_Number__c');
-            let showInEmailForPartner = (partnerId) ? _.get(perPartnerShowInEmail, partnerId, []) : [];
+            let showInEmailForPartner = _.get(perPartnerShowInEmail, pro.Product_Master__c, []);
+            // let showInEmailForPartner = (partnerId) ? _.get(perPartnerShowInEmail, partnerId, []) : [];
 
             let partnerDynamicFields = generateDynamicContent(pro, showInEmailForPartner);
             
