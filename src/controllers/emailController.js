@@ -10,9 +10,8 @@ const staticResource = path.resolve(__dirname, '../staticResources');
 
 // Trigger 7
 function prepareEmailForOfferAcceptance(productList, perPartnerShowInEmail) {
-    // FIXME: Mock Mail + Use perPartnerShowInEmail
     let emailsList = [];
-    let subject = 'Trigger For Offer Acceptance';
+    let subject = 'Ditt valda låneerbjudande hos Ponture';
     
     let htmlBodyAddr = path.resolve(staticResource, "./confirmOfferAccepted1.html");
     
@@ -70,36 +69,12 @@ function prepareEmailForOfferAcceptance(productList, perPartnerShowInEmail) {
 }
 
 
-function prepareEmailForTrigger2(productList) {
-    // FIXME: Mock MAIL
-    let emailsList = [];
-
-    let subject = 'Partner Info By Trigger 2';
-
-    productList.forEach(pro => {
-        let primaryContact = _.get(pro, 'Supplier_Partner_Opportunity__r.OpportunityId__r.PrimaryContact__r');
-
-        let contactEmail = (primaryContact) ? _.get(primaryContact, 'Email') : null;
-        let whatId = _.get(pro, 'Supplier_Partner_Opportunity__r.OpportunityId__c', null);
-
-        let body = JSON.stringify(_.get(pro, 'Supplier_Partner_Opportunity__r.SupplierAccountId__r', 'NO INFORMATION FOUND'), null, 2);
-
-        if (contactEmail) {
-            emailsList.push(createMailObject(contactEmail, subject, body, whatId));
-        }
-    });
-
-    return emailsList;
-}
-
-
 function prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail) {
-    // FIXME: Mock Mail
     let emailsList = [];
 
     let productsPerOpp = _.groupBy(productsList, 'Supplier_Partner_Opportunity__r.OpportunityId__c');
 
-    let subject = "Trigger ActiveOffers";
+    let subject = "Sammanfattning av dina låneerbjudanden från Ponture";
         
     let mainHtmlBodyAddr = path.resolve(staticResource, "./offersOverview.html");
     let offerTemplateHtmlAddr = path.resolve(staticResource, "./offerTemplate.html");
@@ -172,10 +147,9 @@ function prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail)
 }
 
 function prepareOverviewEmailForPartners(partners, productListPerPartners, spoListPerPartners) {
-    // FIXME: Mock Email
     let emailsList = [];
 
-    let subject = 'Check The Overview of Your Ponture Account'
+    let subject = 'Status: ansökningar och erbjudanden - Ponture'
 
     
     let htmlTemplateAddr = path.resolve(staticResource, "./partnerOverview.html");
@@ -271,7 +245,7 @@ function prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInE
 
     let productsPerOpp = _.groupBy(productsList, 'Supplier_Partner_Opportunity__r.OpportunityId__c');
 
-    let subject = "Trigger ActiveOffers After an Accepted Offer Canceled";
+    let subject = "Fler aktiva låneerbjudanden från Ponture";
         
     let mainHtmlBodyAddr = path.resolve(staticResource, "./offersOverview.html");
     let offerTemplateHtmlAddr = path.resolve(staticResource, "./offerTemplate.html");
@@ -400,7 +374,6 @@ async function callSfSendMailAPI(sfConn, emailsList) {
 module.exports = {
     callSfSendMailAPI,
     prepareEmailForOfferAcceptance,
-    prepareEmailForTrigger2,
     prepareEmailForTriggerActiveOffers,
     prepareOverviewEmailForPartners,
     prepareEmailsForacceptedOfferCancelling,
