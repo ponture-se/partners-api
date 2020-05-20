@@ -44,9 +44,10 @@ exports.getPartnerProducts = function(req, res, next) {
         res.status(500).send(error.message);
       }
       console.log(error.config);
-      res.status(400).send(error.config);
+      // res.status(400).send(error.config);
     });
 };
+
 
 exports.getPartnerOfferColumns = function(req, res, next) {
   var accessToken = req.access_token;
@@ -95,9 +96,12 @@ exports.getPartnerOfferColumns = function(req, res, next) {
         res.status(500).send(error.message);
       }
       console.log(error.config);
-      res.status(400).send(error.config);
+      // res.status(400).send(error.config);
     });
 };
+
+
+
 exports.issueOffer = function(req, res, next) {
   var accessToken = req.access_token;
   var apiRoot =
@@ -138,7 +142,7 @@ exports.issueOffer = function(req, res, next) {
         res.status(500).send(error.message);
       }
       console.log(error.config);
-      res.status(400).send(error.config);
+      // res.status(400).send(error.config);
     });
 };
 
@@ -182,7 +186,7 @@ exports.editOffer = function(req, res, next) {
         res.status(500).send(error.message);
       }
       console.log(error.config);
-      res.status(400).send(error.config);
+      // res.status(400).send(error.config);
     });
 };
 exports.getoffers = function(req, res, next) {
@@ -228,7 +232,7 @@ exports.getoffers = function(req, res, next) {
         res.status(500).send(error.message);
       }
       console.log(error.config);
-      res.status(400).send(error.config);
+      // res.status(400).send(error.config);
     });
 };
 
@@ -275,7 +279,7 @@ exports.acceptedoffers = function(req, res, next) {
         res.status(500).send(error.message);
       }
       console.log(error.config);
-      res.status(400).send(error.config);
+      // res.status(400).send(error.config);
     });
 };
 
@@ -322,7 +326,7 @@ exports.lostapplications = function(req, res, next) {
         res.status(500).send(error.message);
       }
       console.log(error.config);
-      res.status(400).send(error.config);
+      // res.status(400).send(error.config);
     });
 };
 
@@ -369,7 +373,7 @@ exports.fundedapplications = function(req, res, next) {
         res.status(500).send(error.message);
       }
       console.log(error.config);
-      res.status(400).send(error.config);
+      // res.status(400).send(error.config);
     });
 };
 
@@ -414,7 +418,7 @@ exports.cancelOffer = function(req, res, next) {
         res.status(500).send(error.message);
       }
       console.log(error.config);
-      res.status(400).send(error.config);
+      // res.status(400).send(error.config);
     });
 };
 
@@ -458,7 +462,7 @@ exports.acceptOffer = function(req, res, next) {
         res.status(500).send(error.message);
       }
       console.log(error.config);
-      res.status(400).send(error.config);
+      // res.status(400).send(error.config);
     });
 };
 
