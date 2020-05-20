@@ -47,7 +47,7 @@ function prepareEmailForOfferAcceptance(productList, perPartnerShowInEmail) {
         let html = emailTemplate;
 
         let customerName = _.get(primaryContact, 'FirstName') || _.get(primaryContact, 'LastName') || '';
-        let partnerName = _.get(partner, 'Display_Name__c') || _.get(partner, 'Name') || '';
+        let partnerName = _.get(partner, 'Display_Name__c', '---') || '---';
         let partnerPhone = _.get(partner, 'Support_Phone__c', '---') || '---';
         let loanAmount = _.get(pro, 'Amount__c', '---') || '---';
         let loanPeriod = _.get(pro, 'Loan_Period__c', '---') || '---';
@@ -124,7 +124,7 @@ function prepareEmailForTriggerActiveOffers(productsList, perPartnerShowInEmail)
 
             let partnerDynamicFields = generateDynamicContent(pro, showInEmailForPartner);
             
-            let partnerName = _.get(partner, 'Display_Name__c') || _.get(partner, 'Name') || '';
+            let partnerName = _.get(partner, 'Display_Name__c', '---') || '---';
             let loanAmount = _.get(pro, 'Amount__c', '---') || '---';
             let loanPeriod = _.get(pro, 'Loan_Period__c', '---') || '---';
             // let totalMonthlyPayment = _.get(pro, 'details.Total_monthly_payment__c', '---') || '---';            
@@ -296,7 +296,7 @@ function prepareEmailsForacceptedOfferCancelling(productsList, perPartnerShowInE
 
             let partnerDynamicFields = generateDynamicContent(pro, showInEmailForPartner);
             
-            let partnerName = _.get(partner, 'Display_Name__c') || _.get(partner, 'Name') || '';
+            let partnerName = _.get(partner, 'Display_Name__c', '---') || '---';
             let loanAmount = _.get(pro, 'Amount__c', '---') || '---';
             let loanPeriod = _.get(pro, 'Loan_Period__c', '---') || '---';
             // let totalMonthlyPayment = _.get(pro, 'details.Total_monthly_payment__c', '---') || '---';            
