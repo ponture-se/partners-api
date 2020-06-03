@@ -77,11 +77,25 @@ function formatNumber(num){
 }
 
 
+async function getCustomSetting(sfConn) {
+    let result = await sfConn.sobject('CustomEnv__c')
+                                .select('*')
+                                .execute();
+
+    if (result.length > 0) {
+        return result[0];
+    } else {
+        return null;
+    }
+}
+
+
 module.exports = {
     addPairToReqNeeds,
     makeSFConnection,
     getRecordTypeId,
     convertDatetimeToSwedenLocale,
     getHourOfDateString,
-    formatNumber
+    formatNumber,
+    getCustomSetting
 }
