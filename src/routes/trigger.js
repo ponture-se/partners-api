@@ -11,12 +11,14 @@ router.post('/acceptedOfferCanceled',
                 triggerValidationRules.acceptedOfferCanceledModel(),
                 validate,
                 getSFConnection,
+                triggerMW.checkEmailAllowing,
                 triggerMW.acceptedOfferCanceledApi
                 );
 
 // Trigger 2
 router.post("/sendYesterdayAcceptedPartnerInfo",
             getSFConnection,
+            triggerMW.checkEmailAllowing,
             triggerMW.sendYesterdayAcceptedPartnerInfoApi
             );
 
@@ -25,6 +27,7 @@ router.post('/sendActiveOffersToCustomer',
             triggerValidationRules.sendActiveOffersToCustomerModel(),
             validate,
             getSFConnection,
+            triggerMW.checkEmailAllowing,
             triggerMW.sendActiveOffersToCustomerApi);
 
 // Trigger #7
@@ -32,11 +35,13 @@ router.post('/realTimeEmailAfterAcceptance',
             triggerValidationRules.realTimeEmailAfterAcceptanceModel(),
             validate,
             getSFConnection,
+            triggerMW.checkEmailAllowing,
             triggerMW.realTimeEmailAfterAcceptanceApi);
 
 // Trigger #8
 router.post('/sendOverviewToPartners', 
             getSFConnection,
+            triggerMW.checkEmailAllowing,
             triggerMW.sendOverviewToPartners_EmailTriggerApi);
 
 
