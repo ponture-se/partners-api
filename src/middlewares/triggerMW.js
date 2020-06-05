@@ -169,18 +169,23 @@ async function acceptedOfferCanceledApi(req, res, next) {
 async function checkEmailAllowing(req, res, next) {
     let sfConn = req.needs.sfConn;
 
-    let cusomtSetting = await myToolkit.getCustomSetting(sfConn);
-
-    if (cusomtSetting) {
-        let permissionApproved =  _.get(cusomtSetting, 'Application_Process_Notification_Email__c', false);
-        
-        if (permissionApproved) {
-            return next();
+    try{
+        let cusomtSetting = await myToolkit.getCustomSetting(sfConn);
+    
+        if (cusomtSetting) {
+            let permissionApproved =  _.get(cusomtSetting, 'Application_Process_Notification_Email__c', false);
+            
+            if (permissionApproved) {
+                return next();
+            }
         }
+    
+        resBody = myResponse(true, null, 200, 'Environment Variable to Send Emails is Disabled.');
+        res.status(200).send(resBody);
+    } catch (err) {
+        resBody = myResponse(false, null, 500, 'Something went wrong', err);
+        res.status(500).send(resBody);
     }
-
-    resBody = myResponse(true, null, 200, 'Environment Variable to Send Emails is Disabled.');
-    res.status(200).send(resBody);
 }
 
 module.exports = {
