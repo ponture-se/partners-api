@@ -5,6 +5,7 @@ const queryHelper = require('./sfHelpers/queryHelper');
 // const crudHelper = require('./sfHelpers/crudHelper');
 // const mime = require('mime-types');
 // const { salesforceException, externalCalloutException } = require('./customeException');
+const { notFoundException, badRequestException } = require('./customeException');
 const fs = require('fs');
 // const mlog = require('./customeLogger');
 // const axios = require('axios');
@@ -47,25 +48,42 @@ async function getContentVersionWithCustomFileId(fileId, sfConn = undefined){
             }
         }
 
-        let where = {Id : fileId};
+        let cvItems;
 
-        let cvItem = await queryHelper.getSingleQueryResult(sfConn, "ContentVersion", where);
-        let fileTitle = cvItem.Title;
-        if (cvItem && cvItem.Title && cvItem.FileExtension) {
-            fileTitle = (cvItem.Title.endsWith('.' + cvItem.FileExtension)) ? cvItem.Title : cvItem.Title + '.' + cvItem.FileExtension;
+        try{
+            let where = {Id : fileId};
+
+            // let cvItem = await queryHelper.getSingleQueryResult(sfConn, "ContentVersion", where);
+            cvItems = await sfConn.sobject('ContentVersion')
+                                    .select('*')
+                                    .where(where)
+                                    .execute();
+        } catch (err) {
+            throw new badRequestException('File Id is incorrect.', err);
         }
-        let cvsInfo = {
-                            cdId: cvItem.ContentDocumentId,
-                            id : cvItem.Id,
-                            title : fileTitle,
-                            fileExtension : cvItem.FileExtension,
-                            content: cvItem.VersionData
-                        };
-        
-        return cvsInfo;
+
+        if (cvItems.length > 0) {
+            let cvItem = cvItems[0];
+            
+            let fileTitle = cvItem.Title;
+            if (cvItem && cvItem.Title && cvItem.FileExtension) {
+                fileTitle = (cvItem.Title.endsWith('.' + cvItem.FileExtension)) ? cvItem.Title : cvItem.Title + '.' + cvItem.FileExtension;
+            }
+            let cvsInfo = {
+                                cdId: cvItem.ContentDocumentId,
+                                id : cvItem.Id,
+                                title : fileTitle,
+                                fileExtension : cvItem.FileExtension,
+                                content: cvItem.VersionData
+                            };
+            
+            return cvsInfo;
+
+        } else {
+            throw new notFoundException('No file found with given Id.');
+        }
     } catch(e) {
-        console.log("getContentVersionWithFileId:", e);
-        return null;
+        throw e;
     }
 }
 
