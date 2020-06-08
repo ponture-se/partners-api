@@ -6,7 +6,7 @@ const auth = require("../controllers/auth");
 
 
 router.get('/download/:fileId',
-            // auth.verifyToken,
+            auth.verifyToken,
             getSFConnection,
             fileMW.downloadFile);
 
