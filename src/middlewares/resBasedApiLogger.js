@@ -29,7 +29,8 @@ function APIlogger(req, res, next){
     // setDatabaseCollectionName(req);
 
     // override send function
-    let temp = res.send;
+    let sendTemp = res.send;
+    let downloadTemp = res.download;
 
     res.send = function () {
         // the try-catch block make sure that the exception will not stopped the functionality of res.send
@@ -49,7 +50,24 @@ function APIlogger(req, res, next){
             console.log('API Logger Error. See this.', e);
         }
 
-        temp.apply(this, arguments);
+        sendTemp.apply(this, arguments);
+    }
+
+    res.download = function () {
+        // the try-catch block make sure that the exception will not stopped the functionality of res.send
+        try {
+            let data = prepareLogDataForResDownload(req, res);
+            
+            if (!req.wasLogged) {
+                logger(data.logLevel, data.reqLog, data.resLog);
+                req.wasLogged = true;
+            }
+
+        } catch (e)  {
+            console.log('API Logger Error. See this.', e);
+        }
+
+        downloadTemp.apply(this, arguments);
     }
 
     return next();
@@ -66,6 +84,37 @@ function prepareLogData(req,res) {
     }
     , resLog = {
         body: res.body,
+        status: res.statusCode
+    };
+
+    let logLevel = null;
+    if (res.statusCode >= 500) {
+        logLevel = 'error';
+    } else if (res.statusCode >= 400) {
+        logLevel = 'warn';
+    } else if (res.statusCode >= 100) {
+        logLevel = 'info';
+    }
+
+    return {
+        logLevel: logLevel,
+        reqLog: reqLog,
+        resLog: resLog
+    };
+
+}
+
+function prepareLogDataForResDownload(req,res) {
+    let reqLog = {
+        url: req.originalUrl,
+        method: req.method,
+        headers: req.headers,
+        params: req.params,
+        query: req.query,
+        body: req.body
+    }
+    , resLog = {
+        body: 'Never Logged due to size limits',
         status: res.statusCode
     };
 
